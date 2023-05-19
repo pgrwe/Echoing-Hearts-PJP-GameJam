@@ -19,10 +19,13 @@ class Level:
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
                 if col == 'x':
-                    Tile((x,y),[self.visible_sprites])
+                    Tile((x,y),[self.visible_sprites,self.collision_sprites])
+                if col == 'p':
+                    self.player = Player((x,y),[self.visible_sprites],self.collision_sprites)
 
     def render(self):
         '''
         updates and renders to the screen
         '''
         self.visible_sprites.draw(self.display_surface)
+        self.visible_sprites.update()
