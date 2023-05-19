@@ -14,17 +14,17 @@ class Player(pygame.sprite.Sprite):
         # gets input keys to determine direction
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
             self.dir.y = -1
-        elif keys[pygame.K_DOWN]:
+        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
             self.dir.y = 1
         else:
             self.dir.y = 0
 
-        if keys[pygame.K_RIGHT]:
-            self.dir.x = -1
-        elif keys[pygame.K_LEFT]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.dir.x = 1
+        elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            self.dir.x = -1
         else:
             self.dir.x = 0
 
@@ -33,9 +33,9 @@ class Player(pygame.sprite.Sprite):
         if self.dir.magnitude() != 0:
             self.dir = self.dir.normalize()
         # moves charcater in direction determined by input keys
-        self.rect.x += self.dir * speed
+        self.rect.x += self.dir.x * speed
         self.collision("horiz")
-        self.rect.y += self.dir * speed
+        self.rect.y += self.dir.y * speed
         self.collision("vert")
 
 
