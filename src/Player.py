@@ -4,7 +4,7 @@ import pygame
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obj_sprites):
         super().__init__(groups)
-        self.image = pygame.image.load("assets/Vegas.png")
+        self.image = pygame.image.load("assets/Vegaslarge.png")
         self.rect = self.image.get_rect(topleft = pos)
         self.dir = pygame.math.Vector2()
         self.speed = 5
