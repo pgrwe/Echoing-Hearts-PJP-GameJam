@@ -1,7 +1,6 @@
 from src import Model
 
 def main():
-    print("hello world")
     game = Model.GameModel()
     game.run()
 

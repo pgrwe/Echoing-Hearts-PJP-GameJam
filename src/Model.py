@@ -1,16 +1,18 @@
 import pygame, sys
+from src.Level import Level
+from src.Settings import *
 
 class GameModel:
-    '''
-    handles game loop
-    deals with collisions
-    
-    '''
+    # model = main (in concept)
     def __init__(self):
+        # general setup
         pygame.init()
-        self.screen = pygame.display.set_mode((1280,720))
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         pygame.display.set_caption('Echoing Hearts')
+
+        # level setup
+        self.level = Level()
 
     def run(self):
         
@@ -21,7 +23,8 @@ class GameModel:
                     sys.exit()
 
             self.screen.fill("black")
+            self.level.run()
             pygame.display.update()
-            self.clock.tick(60)
+            self.clock.tick(FPS)
             
 
