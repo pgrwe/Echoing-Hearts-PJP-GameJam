@@ -14,8 +14,7 @@ class GameModel:
         # level setup
         self.level = Level()
 
-    def run(self):
-        
+    def run(self): 
         while True: 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -23,7 +22,7 @@ class GameModel:
                     sys.exit()
 
             self.screen.fill("black")
-            self.level.run()
+            self.level.render()
             pygame.display.update()
             self.clock.tick(FPS)
             

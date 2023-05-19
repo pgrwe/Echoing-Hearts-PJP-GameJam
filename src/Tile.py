@@ -1,8 +1,10 @@
 import pygame, sys
-
-from pygame.sprite import _Group
+from src.Settings import *
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self):
-        super.__init__(_Group)
+    def __init__(self, position,groups):
+        super().__init__(groups)
+        self.image = pygame.image.load("assets/Grass.png").convert_alpha()
+        self.rect = self.image.get_rect(topleft = position)
+
 
