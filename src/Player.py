@@ -1,4 +1,5 @@
 import pygame
+# from Settings import *
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obj_sprites):
@@ -10,7 +11,7 @@ class Player(pygame.sprite.Sprite):
         self.obj_sprites = obj_sprites
 
     def input(self):
-        # gets input keys to determoine direction
+        # gets input keys to determine direction
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_UP]:
@@ -27,7 +28,7 @@ class Player(pygame.sprite.Sprite):
         else:
             self.dir.x = 0
 
-    def move(self):
+    def move(self, speed):
         # Normalize direction vector so that the speed is the same when moving diagonally
         if self.dir.magnitude() != 0:
             self.dir = self.dir.normalize()
