@@ -12,11 +12,14 @@ class Player(pygame.sprite.Sprite):
 
         self.obj_sprites = obj_sprites
 
+        # spell cooldown
+        self.cooldown = 300
+        
         # player resources
         self.casting = False
+        self.playerstates = "alive"
         self.create_spell = create_spell
         self.healthpoints = 1
-        self.echoes = 0
 
     def input(self):
         # gets input keys to determine direction
@@ -45,7 +48,6 @@ class Player(pygame.sprite.Sprite):
         self.mousepos = pygame.mouse.get_pos()
         return self.mousepos
 
-
     def move(self, speed):
         # Normalize direction vector so that the speed is the same when moving diagonally
         if self.dir.magnitude() != 0:
@@ -56,7 +58,6 @@ class Player(pygame.sprite.Sprite):
         self.hitbox.y += self.dir.y * speed
         self.collision("vert")
         self.rect.center = self.hitbox.center
-
 
     def collision(self, direction):
         # collsion stuff related to the ground or other objects (static)
@@ -76,8 +77,13 @@ class Player(pygame.sprite.Sprite):
                     if self.dir.y < 0: # moving up
                         self.hitbox.top = sprite.hitbox.bottom
 
+    def player_state(self):
+        print(self.healthpoints)
+        print(self.playerstates)
+
     def update(self):
         self.input()
+        self.player_state()
         self.move(self.speed)
 
 
@@ -95,19 +101,12 @@ class Spell(pygame.sprite.Sprite):
         self.x_vel = math.cos(self.angle) * self.speed
         self.y_vel = math.sin(self.angle) * self.speed
 
-        # self.x = initialx
-        # self.y = initialy
-
-        # self.mouse_x, self.mouse_y = mousepos
-        # self.spellspeed = 12
-        # self.angle = math.atan2(self.y - self.mouse_y, self.x - self.mouse_x)
-        # self.x_vel = math.cos(self.angle) * self.spellspeed
-        # self.y_vel = math.sin(self.angle) * self.spellspeed
-
     def spellsling(self):
         self.rect.x += self.x_vel
         self.rect.y += self.y_vel
 
-
     def update(self):
         self.spellsling()
+
+# class Echoes(pygame.sprite.Sprite):
+#     def __init__(self,player,groups):
