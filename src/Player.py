@@ -92,8 +92,8 @@ class Spell(pygame.sprite.Sprite):
 
         self.x_mouse, self.y_mouse = player.mousepos
         self.angle = math.atan2(self.rect.y - self.y_mouse, self.rect.x - self.x_mouse)
-        self.x_vel = math.cos(self.angle (2*math.pi/360)) * self.speed
-        self.y_vel = math.sin(self.angle (2*math.pi/360)) * self.speed
+        self.x_vel = math.cos(self.angle) * self.speed
+        self.y_vel = math.sin(self.angle) * self.speed
 
         # self.x = initialx
         # self.y = initialy
