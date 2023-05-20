@@ -2,7 +2,7 @@ import pygame, math
 # attack_radius = collision
 # notice_radius = infinite
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, name, pos, groups, obj_sprites, target_pos):
+    def __init__(self, name, pos, groups, obj_sprites, player):
         super().__init__(groups)
         self.sprite_type = "enemy"
         self.image = pygame.image.load("assets/Vegaslarge.png")
@@ -12,7 +12,8 @@ class Enemy(pygame.sprite.Sprite):
         self.hitbox  = self.rect.inflate(-6,-10) # removes 3 px from left/right and 5 from top/bottom
 
         self.obj_sprites = obj_sprites
-        self.target_pos = target_pos
+        self.player = player
+        self.target_pos = self.player.hitbox
         self.attack_radius = 120
         self.notice_radius = 400
 
@@ -38,10 +39,10 @@ class Enemy(pygame.sprite.Sprite):
         # moves charcater in direction determined by random
         self.hitbox.x += self.dir.x * speed
         self.collision("horiz")
-        # self.fight("horiz")
+        self.fight("horiz")
         self.hitbox.y += self.dir.y * speed
         self.collision("vert")
-        # self.fight("vert")
+        self.fight("vert")
         self.rect.center = self.hitbox.center
 
 
@@ -63,23 +64,23 @@ class Enemy(pygame.sprite.Sprite):
                     if self.dir.y < 0: # moving up
                         self.hitbox.top = sprite.hitbox.bottom
 
-    # def fight(self, direction):
-    #     # collision with Player
-    #     if direction == "horiz":
-    #         for sprite in self.target_pos:
-    #             if sprite.hitbox.colliderect(self.hitbox):
-    #                 if self.dir.x > 0: # moving right
-    #                     self.hitbox.right = sprite.hitbox.left
-    #                 if self.dir.x < 0: # moving left
-    #                     self.hitbox.left = sprite.hitbox.right
-    #
-    #     if direction == "vert":
-    #         for sprite in self.target_pos:
-    #             if sprite.hitbox.colliderect(self.hitbox):
-    #                 if self.dir.y > 0: # moving down
-    #                     self.hitbox.bottom = sprite.hitbox.top
-    #                 if self.dir.y < 0: # moving up
-    #                     self.hitbox.top = sprite.hitbox.bottom
+    def fight(self, direction):
+        # collision with Player
+        if direction == "horiz":
+            if self.hitbox.colliderect(self.target_pos):
+                print("ouch")
+                if self.dir.x > 0: # moving right
+                    self.hitbox.right = self.hitbox.left
+                if self.dir.x < 0: # moving left
+                    self.hitbox.left = self.hitbox.right
+
+        if direction == "vert":
+            if self.hitbox.colliderect(self.target_pos):
+                print("ouch")
+                if self.dir.y > 0: # moving down
+                    self.hitbox.bottom = self.hitbox.top
+                if self.dir.y < 0: # moving up
+                    self.hitbox.top = self.hitbox.bottom
 
 
     def update(self):

@@ -42,7 +42,7 @@ class Level:
                 if col == 'e':
                     # spawns reaper
                     Tile(self.floor,(x,y),self.background_sprites)
-                    self.enemy = Enemy("reaper",(x,y), [self.visible_sprites], self.collision_sprites, self.player.hitbox)
+                    self.enemy = Enemy("reaper",(x,y), [self.visible_sprites], self.collision_sprites, self.player)
 
     def create_spell(self):
         Spell(self.player,[self.visible_sprites])
