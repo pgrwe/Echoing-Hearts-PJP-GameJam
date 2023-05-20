@@ -2,6 +2,7 @@ import pygame
 from src.Settings import *
 from src.Tile import Tile
 from src.Player import Player, Spell
+from src.Enemy import Enemy
 
 class Level:
     def __init__(self):
@@ -24,10 +25,13 @@ class Level:
                 if col == 'p':
                     # spawns player
                     self.player = Player((x,y),[self.visible_sprites],self.collision_sprites,self.create_spell)
-    
+                if col == 'r':
+                    # spawns reaper
+                    self.enemy = Enemy("reaper",(x,y), [self.visiblie_sprites])
+
     def create_spell(self):
         Spell(self.player,[self.visible_sprites])
-    
+
     def cursor_display(self):
         pygame.draw.circle(self.display_surface, "blue", self.player.mouse_cursor(), 10)
 

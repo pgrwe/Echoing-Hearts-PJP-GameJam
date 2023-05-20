@@ -35,12 +35,12 @@ class Player(pygame.sprite.Sprite):
             self.dir.x = -1
         else:
             self.dir.x = 0
- 
+
         # gets mouse input to determine spellcasts
         mouse = pygame.mouse.get_pressed()
         if mouse[0]:
             self.create_spell()
-        
+
     def mouse_cursor(self):
         self.mousepos = pygame.mouse.get_pos()
         return self.mousepos
@@ -79,7 +79,7 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.input()
         self.move(self.speed)
-    
+
 
 class Spell(pygame.sprite.Sprite):
     def __init__(self,player,groups):
@@ -91,7 +91,7 @@ class Spell(pygame.sprite.Sprite):
         self.speed = 15
 
         self.x_mouse, self.y_mouse = player.mousepos
-        self.angle = math.atan2(self.rect.y - self.y_mouse, self.rect.x - self.x_mouse)
+        self.angle = math.atan2(self.y_mouse - self.rect.y, self.x_mouse - self.rect.x)
         self.x_vel = math.cos(self.angle) * self.speed
         self.y_vel = math.sin(self.angle) * self.speed
 
@@ -100,7 +100,7 @@ class Spell(pygame.sprite.Sprite):
 
         # self.mouse_x, self.mouse_y = mousepos
         # self.spellspeed = 12
-        # self.angle = math.atan2(self.y - self.mouse_y, self.x - self.mouse_x) 
+        # self.angle = math.atan2(self.y - self.mouse_y, self.x - self.mouse_x)
         # self.x_vel = math.cos(self.angle) * self.spellspeed
         # self.y_vel = math.sin(self.angle) * self.spellspeed
 
@@ -108,12 +108,6 @@ class Spell(pygame.sprite.Sprite):
         self.rect.x += self.x_vel
         self.rect.y += self.y_vel
 
+
     def update(self):
         self.spellsling()
-
-
-
-        
-
-        
-
