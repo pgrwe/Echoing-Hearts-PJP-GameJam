@@ -10,6 +10,10 @@ class Player(pygame.sprite.Sprite):
         self.speed = 5
         self.obj_sprites = obj_sprites
 
+        # player resources
+        self.healthpoints = 1
+        self.echoes = 0
+
     def input(self):
         # gets input keys to determine direction
         keys = pygame.key.get_pressed()
@@ -60,3 +64,8 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.input()
         self.move(self.speed)
+    
+
+class Arrow:
+    def __init__(self, x, y, mousepos):
+        pass
