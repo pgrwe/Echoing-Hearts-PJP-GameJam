@@ -14,12 +14,6 @@ class Enemy(pygame.sprite.Sprite):
 
         self.obj_sprites = obj_sprites
 
-        # player resources
-        self.casting = False
-        self.create_spell = create_spell
-        self.healthpoints = 1
-        self.echoes = 0
-
         self.attack_radius = 120
         self.notice_radius = 400
 
