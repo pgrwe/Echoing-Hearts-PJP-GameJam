@@ -19,8 +19,10 @@ class Level:
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
                 if col == 'x':
+                    # spawns tiles
                     Tile((x,y),[self.visible_sprites,self.collision_sprites])
                 if col == 'p':
+                    # spawns player
                     self.player = Player((x,y),[self.visible_sprites],self.collision_sprites)
 
     def render(self):

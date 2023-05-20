@@ -1,4 +1,4 @@
-import pygame
+import pygame, math
 # from Settings import *
 
 class Player(pygame.sprite.Sprite):
@@ -31,6 +31,13 @@ class Player(pygame.sprite.Sprite):
             self.dir.x = -1
         else:
             self.dir.x = 0
+
+        # gets mouse position to determine spell direction
+        mousepos_tuple = pygame.mouse.get_pos()
+
+
+
+
 
     def move(self, speed):
         # Normalize direction vector so that the speed is the same when moving diagonally
@@ -66,6 +73,15 @@ class Player(pygame.sprite.Sprite):
         self.move(self.speed)
     
 
-class Arrow:
-    def __init__(self, x, y, mousepos):
-        pass
+class Spell:
+    def __init__(self, initialx, initialy, mousepos):
+        self.x = initialx
+        self.y = initialy
+
+        self.mouse_x, self.mouse_y = mousepos
+        self.spellspeed = 12
+        self.angle = math.atan2(self.y - self.mouse_y, self.x - self.mouse_x) 
+        self.x_vel = math.cos(self.angle) * self.spellspeed
+        self.y_vel = math.sin(self.angle) * self.spellspeed
+        
+
