@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load("assets/Vegaslarge.png")
         self.rect = self.image.get_rect(topleft = pos)
         self.dir = pygame.math.Vector2()
-        self.speed = 5
+        self.speed = 8
         self.hitbox  = self.rect.inflate(-6,-10) # removes 3 px from left/right and 5 from top/bottom
 
         self.obj_sprites = obj_sprites
