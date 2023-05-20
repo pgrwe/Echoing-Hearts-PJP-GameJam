@@ -8,7 +8,7 @@ class Level:
         # get display surface
         self.display_surface = pygame.display.get_surface()
         # sprite group setup
-        self.visible_sprites = pygame.sprite.Group()
+        self.visible_sprites = YSortCameraGroup()
         self.collision_sprites = pygame.sprite.Group()
         self.create_map()
 
@@ -27,5 +27,23 @@ class Level:
         '''
         updates and renders to the screen
         '''
-        self.visible_sprites.draw(self.display_surface)
+        self.visible_sprites.camera_draw(self.player)
         self.visible_sprites.update()
+
+class YSortCameraGroup(pygame.sprite.Group):
+    def __init__(self):
+        # general setup to put character in middle of the screen at all times
+        super().__init__()
+        self.display_surface = pygame.display.get_surface()
+        self.half_width = self.display_surface.get_size()[0]//2
+        self.half_height = self.display_surface.get_size()[1]//2
+        self.offset = pygame.math.Vector2(100,200)
+
+    def camera_draw(self, player):
+        # calculating offset for camera centering
+        self.offset.x = player.rect.centerx - self.half_width
+        self.offset.y = player.rect.centery - self.half_height
+        # for sprite in self.sprites():
+        for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
+            offset_pos = sprite.rect.topleft - self.offset
+            self.display_surface.blit(sprite.image, offset_pos)
