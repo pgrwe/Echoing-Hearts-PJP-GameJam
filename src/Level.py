@@ -6,28 +6,39 @@ from src.Enemy import Enemy
 
 class Level:
     def __init__(self):
+        # loading tile assets
+        self.front_wall = pygame.image.load("assets/terrain/wall_mid.png")
+        self.right_wall = pygame.image.load("assets/terrain/wall_outer_front_right.png")
+        self.left_wall = pygame.image.load("assets/terrain/wall_outer_front_left.png")
+        self.floor = pygame.image.load("assets/terrain/floor.png")
         # get display surface
         self.display_surface = pygame.display.get_surface()
         # sprite group setup
         self.visible_sprites = YSortCameraGroup()
+        self.background_sprites = pygame.sprite.Group()
         self.collision_sprites = pygame.sprite.Group()
         self.create_map()
 
     def create_map(self):
         for row_index, row in enumerate(WORLD_MAP):
             for col_index, col in enumerate(row):
-                print(row)
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
+                # Spawns tiles
                 if col == 'x':
-                    # spawns tiles
-                    Tile((x,y),[self.visible_sprites,self.collision_sprites])
+                    Tile(self.front_wall,(x,y),[self.visible_sprites,self.collision_sprites])
+                if col == 'l':
+                    Tile(self.left_wall,(x,y),[self.visible_sprites,self.collision_sprites])
+                if col == 'r':
+                    Tile(self.right_wall,(x,y),[self.visible_sprites,self.collision_sprites])
+                
+                # Creature spawns
                 if col == 'p':
                     # spawns player
                     self.player = Player((x,y),[self.visible_sprites],self.collision_sprites,self.create_spell)
-                if col == 'r':
-                    # spawns reaper
-                    self.enemy = Enemy("reaper",(x,y), [self.visiblie_sprites])
+                # if col == 'r':
+                #     # spawns reaper
+                #     self.enemy = Enemy("reaper",(x,y), [self.visible_sprites])
 
     def create_spell(self):
         Spell(self.player,[self.visible_sprites])
@@ -39,7 +50,7 @@ class Level:
         '''
         updates and renders to the screen
         '''
-        self.visible_sprites.camera_draw(self.player)
+        self.visible_sprites.camera_draw(self.player)  
         self.visible_sprites.update()
 
 class YSortCameraGroup(pygame.sprite.Group):
