@@ -15,7 +15,7 @@ class Level:
         self.display_surface = pygame.display.get_surface()
         # sprite group setup
         self.visible_sprites = YSortCameraGroup()
-        self.background_sprites = pygame.sprite.Group()
+        self.background_sprites = CameraGroup()
         self.collision_sprites = pygame.sprite.Group()
         self.create_map()
 
@@ -31,9 +31,12 @@ class Level:
                     Tile(self.left_wall,(x,y),[self.visible_sprites,self.collision_sprites])
                 if col == 'r':
                     Tile(self.right_wall,(x,y),[self.visible_sprites,self.collision_sprites])
+                if col == ' ':
+                    Tile(self.floor,(x,y),self.background_sprites)
 
                 # Creature spawns
                 if col == 'p':
+                    Tile(self.floor,(x,y),self.background_sprites)
                     # spawns player
                     self.player = Player((x,y),[self.visible_sprites],self.collision_sprites,self.create_spell)
                 if col == 'e':
@@ -50,6 +53,8 @@ class Level:
         '''
         updates and renders to the screen
         '''
+        self.background_sprites.camera_draw(self.player)
+        self.background_sprites.update()
         self.visible_sprites.camera_draw(self.player)
         self.visible_sprites.update()
 
@@ -71,6 +76,22 @@ class YSortCameraGroup(pygame.sprite.Group):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_pos)
 
-    def enemy_update(Self, player)
-        enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "enemy"]
-        for enemy in enemy_sprites:
+class CameraGroup(pygame.sprite.Group):
+    def __init__(self):
+        super().__init__()
+        self.display_surface = pygame.display.get_surface()
+        self.half_width = self.display_surface.get_size()[0]//2
+        self.half_height = self.display_surface.get_size()[1]//2
+        self.offset = pygame.math.Vector2(100,200)
+
+    def camera_draw(self, player):
+        # calculating offset for camera centering
+        self.offset.x = player.rect.centerx - self.half_width
+        self.offset.y = player.rect.centery - self.half_height
+
+        for sprite in self.sprites():
+            offset_pos = sprite.rect.topleft - self.offset
+            self.display_surface.blit(sprite.image, offset_pos)
+    # def enemy_update(self, player)
+    #     enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "enemy"]
+    #     for enemy in enemy_sprites:
