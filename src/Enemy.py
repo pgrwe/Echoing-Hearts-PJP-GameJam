@@ -18,7 +18,7 @@ class Enemy(pygame.sprite.Sprite):
 
     def chase(self):
         if self.target_pos.y > self.hitbox.y:
-            self.dir.x = 1
+            self.dir.y = 1
         elif self.target_pos.y < self.hitbox.y:
             self.dir.y = -1
         else:
