@@ -25,9 +25,9 @@ class Level:
                 if col == 'p':
                     # spawns player
                     self.player = Player((x,y),[self.visible_sprites],self.collision_sprites,self.create_spell)
-                if col == 'r':
+                if col == 'e':
                     # spawns reaper
-                    self.enemy = Enemy("reaper",(x,y), [self.visiblie_sprites])
+                    self.enemy = Enemy("reaper",(x,y), [self.visible_sprites], self.collision_sprites, self.player.hitbox)
 
     def create_spell(self):
         Spell(self.player,[self.visible_sprites])
@@ -55,7 +55,11 @@ class YSortCameraGroup(pygame.sprite.Group):
         # calculating offset for camera centering
         self.offset.x = player.rect.centerx - self.half_width
         self.offset.y = player.rect.centery - self.half_height
-        # for sprite in self.sprites():
+
         for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_pos)
+
+    def enemy_update(Self, player)
+        enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "enemy"]
+        for enemy in enemy_sprites:
