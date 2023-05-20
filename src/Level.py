@@ -16,6 +16,7 @@ class Level:
         # sprite group setup
         self.visible_sprites = YSortCameraGroup()
         self.background_sprites = CameraGroup()
+        # self.spell_sprite = CameraSpell()
         self.collision_sprites = pygame.sprite.Group()
         self.create_map()
 
@@ -44,11 +45,11 @@ class Level:
                     Tile(self.floor,(x,y),self.background_sprites)
                     self.enemy = Enemy("reaper",(x,y), [self.visible_sprites], self.collision_sprites, self.player)
 
-    def create_spell(self):
-        Spell(self.player,[self.visible_sprites])
-
     def cursor_display(self):
         pygame.draw.circle(self.display_surface, "blue", self.player.mouse_cursor(), 10)
+
+    def create_spell(self, mousepos):
+        Spell(self.player,[self.visible_sprites], self.player.mouse_cursor())
 
     def render(self):
         '''

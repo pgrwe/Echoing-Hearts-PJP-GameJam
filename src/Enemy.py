@@ -36,7 +36,7 @@ class Enemy(pygame.sprite.Sprite):
         # Normalize direction vector so that the speed is the same when moving diagonally
         if self.dir.magnitude() != 0:
             self.dir = self.dir.normalize()
-        # moves charcater in direction determined by random
+        # moves character in direction determined by random
         self.hitbox.x += self.dir.x * speed
         self.collision("horiz")
         self.fight("horiz")
