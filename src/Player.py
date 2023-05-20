@@ -8,6 +8,8 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft = pos)
         self.dir = pygame.math.Vector2()
         self.speed = 5
+        self.hitbox  = self.rect.inflate(-6,-10) # removes 3 px from left/right and 5 from top/bottom
+
         self.obj_sprites = obj_sprites
 
         # player resources
@@ -44,29 +46,30 @@ class Player(pygame.sprite.Sprite):
         if self.dir.magnitude() != 0:
             self.dir = self.dir.normalize()
         # moves charcater in direction determined by input keys
-        self.rect.x += self.dir.x * speed
+        self.hitbox.x += self.dir.x * speed
         self.collision("horiz")
-        self.rect.y += self.dir.y * speed
+        self.hitbox.y += self.dir.y * speed
         self.collision("vert")
+        self.rect.center = self.hitbox.center
 
 
     def collision(self, direction):
         # collsion stuff related to the ground or other objects (static)
         if direction == "horiz":
             for sprite in self.obj_sprites:
-                if sprite.rect.colliderect(self.rect):
+                if sprite.hitbox.colliderect(self.hitbox):
                     if self.dir.x > 0: # moving right
-                        self.rect.right = sprite.rect.left
+                        self.hitbox.right = sprite.hitbox.left
                     if self.dir.x < 0: # moving left
-                        self.rect.left = sprite.rect.right
+                        self.hitbox.left = sprite.hitbox.right
 
         if direction == "vert":
             for sprite in self.obj_sprites:
-                if sprite.rect.colliderect(self.rect):
+                if sprite.hitbox.colliderect(self.hitbox):
                     if self.dir.y > 0: # moving down
-                        self.rect.bottom = sprite.rect.top
+                        self.hitbox.bottom = sprite.hitbox.top
                     if self.dir.y < 0: # moving up
-                        self.rect.top = sprite.rect.bottom
+                        self.hitbox.top = sprite.hitbox.bottom
 
     def update(self):
         self.input()
