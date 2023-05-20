@@ -1,7 +1,7 @@
 import pygame
 from src.Settings import *
 from src.Tile import Tile
-from src.Player import Player
+from src.Player import Player, Spell
 
 class Level:
     def __init__(self):
@@ -23,7 +23,13 @@ class Level:
                     Tile((x,y),[self.visible_sprites,self.collision_sprites])
                 if col == 'p':
                     # spawns player
-                    self.player = Player((x,y),[self.visible_sprites],self.collision_sprites)
+                    self.player = Player((x,y),[self.visible_sprites],self.collision_sprites,self.create_spell)
+    
+    def create_spell(self):
+        Spell(self.player,[self.visible_sprites])
+    
+    def cursor_display(self):
+        pygame.draw.circle(self.display_surface, "blue", self.player.mouse_cursor(), 10)
 
     def render(self):
         '''

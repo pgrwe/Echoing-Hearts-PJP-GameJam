@@ -23,6 +23,7 @@ class GameModel:
 
             self.screen.fill("black")
             self.level.render()
+            self.level.cursor_display()
             pygame.display.update()
             self.clock.tick(FPS)
             

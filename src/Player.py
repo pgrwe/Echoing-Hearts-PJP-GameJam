@@ -2,7 +2,7 @@ import pygame, math
 # from Settings import *
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, obj_sprites):
+    def __init__(self, pos, groups, obj_sprites, create_spell):
         super().__init__(groups)
         self.image = pygame.image.load("assets/Vegaslarge.png")
         self.rect = self.image.get_rect(topleft = pos)
@@ -13,6 +13,8 @@ class Player(pygame.sprite.Sprite):
         self.obj_sprites = obj_sprites
 
         # player resources
+        self.casting = False
+        self.create_spell = create_spell
         self.healthpoints = 1
         self.echoes = 0
 
@@ -33,12 +35,15 @@ class Player(pygame.sprite.Sprite):
             self.dir.x = -1
         else:
             self.dir.x = 0
-
-        # gets mouse position to determine spell direction
+ 
+        # gets mouse input to determine spellcasts
+        mouse = pygame.mouse.get_pressed()
+        if mouse[0]:
+            self.create_spell()
+        
+    def mouse_cursor(self):
         mousepos_tuple = pygame.mouse.get_pos()
-
-
-
+        return mousepos_tuple
 
 
     def move(self, speed):
@@ -76,15 +81,26 @@ class Player(pygame.sprite.Sprite):
         self.move(self.speed)
     
 
-class Spell:
-    def __init__(self, initialx, initialy, mousepos):
-        self.x = initialx
-        self.y = initialy
+class Spell(pygame.sprite.Sprite):
+    def __init__(self,player,groups):
+        super().__init__(groups)
+        # load in spell image later self.image = pygame.image.load().convert_alpha()
+        self.image = pygame.Surface((10,10))
+        self.image.fill("red")
+        self.rect = self.image.get_rect(center = player.rect.center)
 
-        self.mouse_x, self.mouse_y = mousepos
-        self.spellspeed = 12
-        self.angle = math.atan2(self.y - self.mouse_y, self.x - self.mouse_x) 
-        self.x_vel = math.cos(self.angle) * self.spellspeed
-        self.y_vel = math.sin(self.angle) * self.spellspeed
+        # self.x = initialx
+        # self.y = initialy
+
+        # self.mouse_x, self.mouse_y = mousepos
+        # self.spellspeed = 12
+        # self.angle = math.atan2(self.y - self.mouse_y, self.x - self.mouse_x) 
+        # self.x_vel = math.cos(self.angle) * self.spellspeed
+        # self.y_vel = math.sin(self.angle) * self.spellspeed
+
+        # def update(self):
+
+        
+
         
 
