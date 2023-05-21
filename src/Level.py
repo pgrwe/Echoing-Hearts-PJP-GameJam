@@ -22,6 +22,7 @@ class Level:
         self.spell_sprites = pygame.sprite.Group()
         self.collision_sprites = pygame.sprite.Group()
         self.enemy_sprites = pygame.sprite.Group()
+        self.echo_sprites = pygame.sprite.Group()
 
         # ui setup
         self.ui = UI()
@@ -54,7 +55,7 @@ class Level:
                     # spawns player
                     # self.player = Player((x,y),[self.visible_sprites],self.collision_sprites,self.create_spell)
                     self.player = Player((x,y),[self.visible_sprites],self.collision_sprites, echo_hearts)
-    
+
     def cursor_display(self):
         pygame.draw.circle(self.display_surface, "blue", self.player.mouse_cursor(), 10)
 
@@ -64,7 +65,7 @@ class Level:
             print("Echo: ", self.player.echo_hearts)
             self.player.healthpoints += self.player.echo_hearts
             print("HP: ", self.player.healthpoints)
-            Echoes(self.player,[self.visible_sprites],self.collision_sprites, self.enemy_sprites)
+            Echoes(self.player,[self.visible_sprites, self.echo_sprites],self.collision_sprites, self.enemy_sprites)
             self.state = "reset"
 
     def create_spell(self):
@@ -82,14 +83,6 @@ class Level:
             self.enemy_spawn_cooldown = 50
         self.enemy_spawn_cooldown -= 1
 
-<<<<<<< HEAD
-
-    def game_reset(self):
-        if self.player.healthpoints <= 0:
-            self.create_map()
-
-=======
->>>>>>> 0bc0e5fbc6a8b2f96880e9eaf6a6b68bf6bd995e
     def render(self):
         '''
         updates and renders to the screen
@@ -102,6 +95,20 @@ class Level:
         self.visible_sprites.camera_draw(self.player)
         self.visible_sprites.update()
         self.ui.ui_render(self.player)
+
+    def reset(self):
+        for sprite in self.collision_sprites:
+            sprite.remove(self.collision_sprites)
+            sprite.kill()
+        for sprite in self.background_sprites:
+            sprite.remove(self.background_sprites)
+            sprite.kill()
+        for enemy in self.enemy_sprites:
+            sprite.remove(self.enemy_sprites)
+            enemy.kill()
+        self.player.kill()
+        self.create_map(self.player.echo_hearts)
+        self.state = "game"
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):

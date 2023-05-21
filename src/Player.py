@@ -30,6 +30,17 @@ class Player(pygame.sprite.Sprite):
         self.run_left_list.append(pygame.transform.flip(self.run_right_list[3], True, False))
         self.run_left_list.append(pygame.transform.flip(self.run_right_list[4], True, False))
 
+        self.dying_list_right = []
+        self.dying_list_right.append(pygame.image.load("assets/echomage/death1.png"))
+        self.dying_list_right.append(pygame.image.load("assets/echomage/death2.png"))
+        self.dying_list_right.append(pygame.image.load("assets/echomage/death3.png"))
+        self.dying_list_right.append(pygame.image.load("assets/echomage/death4.png"))
+
+        self.dying_list_left = []
+        self.dying_list_left.append(pygame.transform.flip(self.dying_list_right[0], True, False))
+        self.dying_list_left.append(pygame.transform.flip(self.dying_list_right[1], True, False))
+        self.dying_list_left.append(pygame.transform.flip(self.dying_list_right[2], True, False))
+        self.dying_list_left.append(pygame.transform.flip(self.dying_list_right[3], True, False))
         # animations
         self.current_frame = 0
         self.animation_state = "idle_right"
@@ -50,7 +61,7 @@ class Player(pygame.sprite.Sprite):
         self.playerstates = "alive"
         self.spell_cast = False
         self.healthpoints = 1
-        self.echo_hearts = 0 
+        self.echo_hearts = meta_echo_hearts 
         self.player_time = 0
         self.facing = "right"
 
@@ -58,49 +69,53 @@ class Player(pygame.sprite.Sprite):
 
     def input(self):
         # gets input keys to determine direction
-        keys = pygame.key.get_pressed()
+        if self.playerstates != "dying":
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_UP] or keys[pygame.K_w]:
+                self.dir.y = -1
+                if self.facing == "right" and self.dir.x == 0:
+                    self.animation_state = "run_right"
+                elif self.facing == "left" and self.dir.x == 0:
+                    self.animation_state = "run_left"
+            elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                self.dir.y = 1
+                if self.facing == "right" and self.dir.x == 0:
+                    self.animation_state = "run_right"
+                elif self.facing == "left" and self.dir.x == 0:
+                    self.animation_state = "run_left"
+            else:
+                self.dir.y = 0
 
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
-            self.dir.y = -1
-            if self.facing == "right" and self.dir.x == 0:
+            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                self.dir.x = 1
+                self.facing = "right"
                 self.animation_state = "run_right"
-            elif self.facing == "left" and self.dir.x == 0:
+            elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                self.dir.x = -1
+                self.facing = "left"
                 self.animation_state = "run_left"
-        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
-            self.dir.y = 1
-            if self.facing == "right" and self.dir.x == 0:
-                self.animation_state = "run_right"
-            elif self.facing == "left" and self.dir.x == 0:
-                self.animation_state = "run_left"
-        else:
-            self.dir.y = 0
+            else:
+                self.dir.x = 0
 
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.dir.x = 1
-            self.facing = "right"
-            self.animation_state = "run_right"
-        elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.dir.x = -1
-            self.facing = "left"
-            self.animation_state = "run_left"
+            if self.facing == "right" and self.dir == (0,0):
+                self.animation_state = "idle_right"
+            elif self.facing == "left" and self.dir == (0,0):
+                self.animation_state = "idle_left"
+
+            # gets mouse input to determine spellcasts
+            self.spell_timer = pygame.time.get_ticks()
+            mouse = pygame.mouse.get_pressed()
+            if mouse[0] and self.cooldown <= 0:
+                self.spell_cast = True
+                self.cooldown = 25
+
+            self.cooldown-=1
         else:
             self.dir.x = 0
+            self.dir.y = 0
+            self.animation_state = "dying"
 
-        if self.facing == "right" and self.dir == (0,0):
-            self.animation_state = "idle_right"
-        elif self.facing == "left" and self.dir == (0,0):
-            self.animation_state = "idle_left"
 
-        # gets mouse input to determine spellcasts
-        self.spell_timer = pygame.time.get_ticks()
-        mouse = pygame.mouse.get_pressed()
-        if mouse[0] and self.cooldown <= 0:
-            self.spell_cast = True
-            self.cooldown = 25
-
-        self.cooldown-=1
-
-            # self.mouse_cursor()
     def mouse_cursor(self):
         self.mousepos = pygame.mouse.get_pos()
         return self.mousepos
@@ -164,7 +179,20 @@ class Player(pygame.sprite.Sprite):
             if self.current_frame >= len(self.run_left_list):
                 self.current_frame = 0
             self.image = self.run_left_list[int(self.current_frame)]
-
+        
+        if self.animation_state == "dying" and self.facing == "right":
+            self.current_frame += 0.05
+            if self.current_frame >= len(self.dying_list_right):
+                self.current_frame = 0
+                self.playerstates = "death"
+            self.image = self.dying_list_right[int(self.current_frame)]
+        
+        if self.animation_state == "dying" and self.facing == "left":
+            self.current_frame += 0.05
+            if self.current_frame >= len(self.dying_list_left):
+                self.current_frame = 0
+                self.playerstates = "death"
+            self.image = self.dying_list_left[int(self.current_frame)]
     def update(self):
         # print(self.healthpoints)
         # print(self.playerstates)
