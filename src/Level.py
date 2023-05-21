@@ -50,9 +50,6 @@ class Level:
     def cursor_display(self):
         pygame.draw.circle(self.display_surface, "blue", self.player.mouse_cursor(), 10)
 
-    # def create_spell(self, mousepos):
-    #     Spell(self.player,[self.visible_sprites], self.player.mouse_cursor())
-
     def render(self):
         '''
         updates and renders to the screen
@@ -65,7 +62,6 @@ class Level:
         self.background_sprites.update()
         self.visible_sprites.camera_draw(self.player)
         self.visible_sprites.update()
-        self.collision_sprites.update()
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
