@@ -98,7 +98,6 @@ class Player(pygame.sprite.Sprite):
             self.spell_cast = True
             self.cooldown = 25
 
-        # print(self.cooldown)
         self.cooldown-=1
 
             # self.mouse_cursor()
@@ -208,14 +207,19 @@ class Spell(pygame.sprite.Sprite):
     def hit(self):
         for enemy in self.enemy_group:
             if self.rect.colliderect(enemy.hitbox):
-                enemy.healthpoints -= 1
+                self.hit_timer = pygame.time.get_ticks()
+                print("E_hp: ", enemy.healthpoints)
                 enemy.state = "hit"
+                enemy.healthpoints -= 1
+            # enemy.state = "chase"
+
 
 
     def update(self):
         # self.spell_cast()
         for enemy in self.enemy_group:
             if enemy.healthpoints == 0:
+                self.enemy_group.remove(enemy)
                 enemy.kill()
         self.spellsling()
         if pygame.time.get_ticks() >= self.spell_kill_timer + 1000:
@@ -243,7 +247,7 @@ class Echoes(pygame.sprite.Sprite):
         self.echo_timer = pygame.time.get_ticks()
         self.hitbox = self.rect.inflate(0,-10) # shrink 5 px from top and bottom
         self.player = player
-    
+
         self.facing = self.player.facing
 
     def animation_tracker(self):

@@ -15,10 +15,8 @@ class Enemy(pygame.sprite.Sprite):
         self.obj_sprites = obj_sprites
         self.player = player
         self.target_pos = self.player.hitbox
-        self.attack_radius = 120
-        self.notice_radius = 400
         self.healthpoints = 10
-        self.state = "alive"
+        self.state = "chase"
 
     def chase(self):
         if self.target_pos.y > self.hitbox.y:
@@ -96,3 +94,5 @@ class Enemy(pygame.sprite.Sprite):
         if self.player.playerstates != "recovering":
             self.chase()
             self.move(self.speed)
+        if self.state == "hit":
+            self.image.fill("red")
