@@ -26,7 +26,7 @@ class Level:
         # ui setup
         self.ui = UI()
 
-        self.create_map()
+        self.map = self.create_map()
 
         self.enemy_spawn_cooldown = 50
 
@@ -75,6 +75,10 @@ class Level:
             self.enemy_sprites.add(self.enemy)
             self.enemy_spawn_cooldown = 50
         self.enemy_spawn_cooldown -= 1
+
+    def game_reset(self):
+        if self.player.healthpoints <= 0:
+            self.create_map()
 
     def render(self):
         '''

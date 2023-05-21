@@ -10,6 +10,7 @@ class GameModel:
         pygame.mouse.set_cursor(*pygame.cursors.diamond)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
+        self.game_state = "menu"
         pygame.display.set_caption('Echoing Hearts')
 
         # level setup
