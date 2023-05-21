@@ -71,7 +71,6 @@ class Level:
         self.visible_sprites.camera_draw(self.player)
         self.visible_sprites.update()
 
-
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
         # general setup to put character in middle of the screen at all times
