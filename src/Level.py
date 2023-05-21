@@ -63,8 +63,6 @@ class Level:
         if self.player.playerstates == "death":
             self.meta_echo_hearts += 1
             print("Echo: ", self.player.echo_hearts)
-            self.player.healthpoints += self.player.echo_hearts
-            print("HP: ", self.player.healthpoints)
             Echoes(self.player,[self.visible_sprites, self.echo_sprites],self.collision_sprites, self.enemy_sprites)
             self.state = "reset"
 
@@ -104,10 +102,12 @@ class Level:
             sprite.remove(self.background_sprites)
             sprite.kill()
         for enemy in self.enemy_sprites:
-            sprite.remove(self.enemy_sprites)
+            enemy.remove(self.enemy_sprites)
             enemy.kill()
         self.player.kill()
         self.create_map(self.player.echo_hearts)
+        self.player.healthpoints += self.player.echo_hearts
+        print("HP: ", self.player.healthpoints)
         self.state = "game"
 
 class YSortCameraGroup(pygame.sprite.Group):
