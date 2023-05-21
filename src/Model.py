@@ -15,8 +15,8 @@ class GameModel:
         # level setup
         self.level = Level()
 
-
-        
+    def menu_loop(self):
+        pass 
 
     def game_loop(self):
         while True:
@@ -30,3 +30,15 @@ class GameModel:
             # self.level.cursor_display()
             pygame.display.update()
             self.clock.tick(FPS)
+
+    def run(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if self.level.state == "reset":
+                    new = self.game_loop()
+                if self.level.state == "game":
+                    current_loop = self.game_loop()
+

@@ -2,7 +2,7 @@ from src import Model
 
 def main():
     game = Model.GameModel()
-    game.game_loop()
+    game.run()
 
 if __name__ == '__main__':
     main()
