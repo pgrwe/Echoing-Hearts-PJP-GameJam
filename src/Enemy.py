@@ -70,14 +70,12 @@ class Enemy(pygame.sprite.Sprite):
         # collision with Player
         if direction == "horiz":
             if self.hitbox.colliderect(self.target_pos):
-                # print("ouch")
                 self.player.healthpoints -= 1
                 if self.player.healthpoints <= 0:
                     self.player.playerstates = "death"
                 else:
                     self.player.playerstates = "hit"
                 self.player.echo_hearts += 1
-                self.player.playerstates = "hit"
                 self.player.player_time = pygame.time.get_ticks()
                 if self.dir.x > 0: # moving right
                     self.hitbox.right = self.hitbox.left
@@ -86,14 +84,12 @@ class Enemy(pygame.sprite.Sprite):
 
         if direction == "vert":
             if self.hitbox.colliderect(self.target_pos):
-                # print("ouch")
                 self.player.healthpoints -= 1
                 if self.player.healthpoints <= 0:
                     self.player.playerstates = "death"
                 else:
                     self.player.playerstates = "hit"
                 self.player.echo_hearts += 1
-                self.player.playerstates = "hit"
                 self.player.player_time = pygame.time.get_ticks()
                 if self.dir.y > 0: # moving down
                     self.hitbox.bottom = self.hitbox.top

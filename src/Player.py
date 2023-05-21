@@ -50,11 +50,7 @@ class Player(pygame.sprite.Sprite):
         self.playerstates = "alive"
         self.spell_cast = False
         self.healthpoints = 1
-<<<<<<< HEAD
         self.echo_hearts = 0
-=======
-        self.echo_hearts = 0
->>>>>>> 7fc6c342ea1804b72e0ee59fdbb58f3df02613eb
         self.player_time = 0
         self.facing = "right"
 
@@ -261,7 +257,6 @@ class Echoes(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
-            print("CONSUME")
             if self.player.healthpoints >= 2:
                 self.consume_echo()
 
@@ -287,8 +282,6 @@ class Echoes(pygame.sprite.Sprite):
                 # print("E_hp: ", enemy.healthpoints)
                 enemy.state = "hit"
                 enemy.healthpoints -= 100
-
-        print("Gone")
 
 
     def update(self):
