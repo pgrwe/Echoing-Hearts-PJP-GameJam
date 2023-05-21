@@ -25,13 +25,15 @@ class Level:
 
         # ui setup
         self.ui = UI()
+        self.state = "game"
 
-        self.map = self.create_map()
+        self.meta_echo_hearts = 0
+        self.map = self.create_map(self.meta_echo_hearts)
 
         self.enemy_spawn_cooldown = 50
 
 
-    def create_map(self):
+    def create_map(self, echo_hearts):
         for row_index, row in enumerate(WORLD_MAP):
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
@@ -51,19 +53,19 @@ class Level:
                     Tile(self.floor,(x,y),self.background_sprites)
                     # spawns player
                     # self.player = Player((x,y),[self.visible_sprites],self.collision_sprites,self.create_spell)
-                    self.player = Player((x,y),[self.visible_sprites],self.collision_sprites)
-
+                    self.player = Player((x,y),[self.visible_sprites],self.collision_sprites, echo_hearts)
+    
     def cursor_display(self):
         pygame.draw.circle(self.display_surface, "blue", self.player.mouse_cursor(), 10)
 
     def create_echo(self):
         if self.player.playerstates == "death":
-            self.player.echo_hearts += 1
+            self.meta_echo_hearts += 1
             print("Echo: ", self.player.echo_hearts)
             self.player.healthpoints += self.player.echo_hearts
             print("HP: ", self.player.healthpoints)
             Echoes(self.player,[self.visible_sprites],self.collision_sprites, self.enemy_sprites)
-            self.player.playerstates = "recovering"
+            self.state = "reset"
 
     def create_spell(self):
         if self.player.spell_cast == True:
@@ -80,11 +82,14 @@ class Level:
             self.enemy_spawn_cooldown = 50
         self.enemy_spawn_cooldown -= 1
 
+<<<<<<< HEAD
 
     def game_reset(self):
         if self.player.healthpoints <= 0:
             self.create_map()
 
+=======
+>>>>>>> 0bc0e5fbc6a8b2f96880e9eaf6a6b68bf6bd995e
     def render(self):
         '''
         updates and renders to the screen

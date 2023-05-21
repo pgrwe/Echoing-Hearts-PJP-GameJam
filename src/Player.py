@@ -3,7 +3,7 @@ from src.Settings import *
 
 class Player(pygame.sprite.Sprite):
     # def __init__(self, pos, groups, obj_sprites, create_spell):
-    def __init__(self, pos, groups, obj_sprites):
+    def __init__(self, pos, groups, obj_sprites, meta_echo_hearts):
         super().__init__(groups)
         # importing animation
         self.idle_right = []
@@ -50,7 +50,7 @@ class Player(pygame.sprite.Sprite):
         self.playerstates = "alive"
         self.spell_cast = False
         self.healthpoints = 1
-        self.echo_hearts = 0
+        self.echo_hearts = 0 
         self.player_time = 0
         self.facing = "right"
 
@@ -85,7 +85,6 @@ class Player(pygame.sprite.Sprite):
             self.animation_state = "run_left"
         else:
             self.dir.x = 0
-
 
         if self.facing == "right" and self.dir == (0,0):
             self.animation_state = "idle_right"
@@ -208,7 +207,7 @@ class Spell(pygame.sprite.Sprite):
     def hit(self):
         for enemy in self.enemy_group:
             if self.rect.colliderect(enemy.hitbox):
-                # print("E_hp: ", enemy.healthpoints)
+                print("E_hp: ", enemy.healthpoints)
                 enemy.state = "hit"
                 enemy.healthpoints -= 1
 
@@ -219,7 +218,7 @@ class Spell(pygame.sprite.Sprite):
     def update(self):
         # self.spell_cast()
         for enemy in self.enemy_group:
-            if enemy.healthpoints <= 0:
+            if enemy.healthpoints == 0:
                 self.enemy_group.remove(enemy)
                 enemy.kill()
         self.spellsling()
