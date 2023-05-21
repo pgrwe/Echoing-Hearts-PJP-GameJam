@@ -184,7 +184,7 @@ class Player(pygame.sprite.Sprite):
 
 class Spell(pygame.sprite.Sprite):
     # def __init__(self,player,groups,mousepos):
-    def __init__(self, player_rect, groups, mousepos, enemy):
+    def __init__(self, player_rect, groups, mousepos, enemy_group):
         super().__init__(groups)
         # load in spell image later self.image = pygame.image.load().convert_alpha()
         self.display_surface = pygame.display.get_surface()
@@ -193,7 +193,7 @@ class Spell(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = player_rect.center)
         self.speed = 15
         self.spell_kill_timer = pygame.time.get_ticks()
-        self.enemy = enemy
+        self.enemy_group = enemy_group
 
         self.x_mouse, self.y_mouse = mousepos
         # how ever far the mouse is from the actual center is how far the mouse is from the player
@@ -212,17 +212,17 @@ class Spell(pygame.sprite.Sprite):
         self.hit()
 
     def hit(self):
-        if self.rect.colliderect(self.enemy.hitbox):
-            print("ouch")
-            self.enemy.healthpoints -= 1
-            print(self.enemy.healthpoints)
-            self.enemy.state = "hit"
+        for enemy in self.enemy_group:
+            if self.rect.colliderect(enemy.hitbox):
+                enemy.healthpoints -= 1
+                enemy.state = "hit"
 
 
     def update(self):
         # self.spell_cast()
-        if self.enemy.healthpoints == 0:
-            self.enemy.kill()
+        for enemy in self.enemy_group:
+            if enemy.healthpoints == 0:
+                enemy.kill()
         self.spellsling()
         if pygame.time.get_ticks() >= self.spell_kill_timer + 300:
             self.kill()
