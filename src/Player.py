@@ -45,7 +45,7 @@ class Player(pygame.sprite.Sprite):
         self.obj_sprites = obj_sprites
 
         # spell cooldown
-        self.cooldown = 300
+        self.cooldown = 0
 
         # player resources
         self.playerstates = "alive"
