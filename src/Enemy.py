@@ -69,7 +69,7 @@ class Enemy(pygame.sprite.Sprite):
         # collision with Player
         if direction == "horiz":
             if self.hitbox.colliderect(self.target_pos):
-                print("ouch")
+                # print("ouch")
                 self.player.healthpoints -= 1
                 self.player.playerstates = "hit"
                 if self.dir.x > 0: # moving right
@@ -79,7 +79,7 @@ class Enemy(pygame.sprite.Sprite):
 
         if direction == "vert":
             if self.hitbox.colliderect(self.target_pos):
-                print("ouch") 
+                # print("ouch") 
                 self.player.healthpoints -= 1
                 self.player.playerstates = "hit"
                 if self.dir.y > 0: # moving down

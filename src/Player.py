@@ -2,7 +2,8 @@ import pygame, math
 from src.Settings import *
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, obj_sprites, create_spell):
+    # def __init__(self, pos, groups, obj_sprites, create_spell):
+    def __init__(self, pos, groups, obj_sprites):
         super().__init__(groups)
         self.image = pygame.image.load("assets/Vegaslarge.png")
         self.rect = self.image.get_rect(topleft = pos)
@@ -14,12 +15,14 @@ class Player(pygame.sprite.Sprite):
 
         # spell cooldown
         self.cooldown = 300
-        
+
         # player resources
         self.casting = False
         self.playerstates = "alive"
-        self.create_spell = create_spell
+        self.spell_cast = False
+        # self.create_spell = create_spell
         self.healthpoints = 1
+
 
     def input(self):
         # gets input keys to determine direction
@@ -43,11 +46,9 @@ class Player(pygame.sprite.Sprite):
         self.spell_timer = pygame.time.get_ticks()
         mouse = pygame.mouse.get_pressed()
         if mouse[0]:
-            self.create_spell(self.mouse_cursor())
+            self.spell_cast = True
 
-            
             # self.mouse_cursor()
-
     def mouse_cursor(self):
         self.mousepos = pygame.mouse.get_pos()
         return self.mousepos
@@ -82,8 +83,9 @@ class Player(pygame.sprite.Sprite):
                         self.hitbox.top = sprite.hitbox.bottom
 
     def player_state(self):
-        print(self.healthpoints)
-        print(self.playerstates)
+        pass
+        # print(self.healthpoints)
+        # print(self.playerstates)
 
     def update(self):
         self.input()
@@ -92,30 +94,25 @@ class Player(pygame.sprite.Sprite):
 
 
 class Spell(pygame.sprite.Sprite):
-    def __init__(self,player,groups,mousepos):
+    # def __init__(self,player,groups,mousepos):
+    def __init__(self, player_rect, groups, mousepos):
         super().__init__(groups)
         # load in spell image later self.image = pygame.image.load().convert_alpha()
+        self.display_surface = pygame.display.get_surface()
         self.image = pygame.Surface((10,10))
         self.image.fill("red")
-        self.rect = self.image.get_rect(center = player.rect.center)
+        self.rect = self.image.get_rect(center = player_rect.center)
         self.speed = 15
         self.spell_kill_timer = pygame.time.get_ticks()
 
-        # setup current position vector
-        self.rect_vec = pygame.math.Vector2(self.rect.x,self.rect.y)
+        self.x_mouse, self.y_mouse = mousepos
+        # how ever far the mouse is from the actual center is how far the mouse is from the player
+        self.diff_x = self.x_mouse - 640
+        self.diff_y = self.y_mouse - 360
+        self.now_x_mouse = self.rect.x + self.diff_x
+        self.now_y_mouse = self.rect.y + self.diff_y
+        self.angle = math.atan2(self.now_y_mouse - self.rect.y, self.now_x_mouse - self.rect.x)
 
-        # setup up mouse position vector
-        self.mouse_vec = pygame.math.Vector2(mousepos)
-
-        # dot product between mouse and pos vectors
-        self.dot_product = self.mouse_vec.dot(self.rect_vec)
-
-        # magnitutudes of each vector
-        self.mouse_vec_mag = self.mouse_vec.magnitude()
-        self.rect_vec_mag = self.mouse_vec.magnitude()
-
-        
-        self.angle = (self.dot_product/(self.mouse_vec_mag * self.rect_vec_mag))
         self.x_vel = math.cos(self.angle) * self.speed
         self.y_vel = math.sin(self.angle) * self.speed
 
@@ -123,10 +120,11 @@ class Spell(pygame.sprite.Sprite):
         self.rect.x += self.x_vel
         self.rect.y += self.y_vel
 
+
     def update(self):
         # self.spell_cast()
         self.spellsling()
-        if pygame.time.get_ticks() >= self.spell_kill_timer + 200:
+        if pygame.time.get_ticks() >= self.spell_kill_timer + 300:
             self.kill()
 
 class Echoes(pygame.sprite.Sprite):
