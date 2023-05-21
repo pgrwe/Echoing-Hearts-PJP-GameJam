@@ -1,7 +1,7 @@
 import pygame
 from src.Settings import *
 from src.Tile import Tile
-from src.Player import Player, Spell
+from src.Player import Player, Spell, Echoes
 from src.Enemy import Enemy
 
 class Level:
@@ -52,14 +52,21 @@ class Level:
     def create_spell(self, mousepos):
         Spell(self.player,[self.visible_sprites], self.player.mouse_cursor())
 
+    def create_echo(self):
+        if self.player.playerstates == "hit":
+            Echoes(self.player,[self.visible_sprites],self.collision_sprites)
+            self.player.playerstates = "recovering"
+
     def render(self):
         '''
         updates and renders to the screen
         '''
+        self.create_echo()
         self.background_sprites.camera_draw(self.player)
         self.background_sprites.update()
         self.visible_sprites.camera_draw(self.player)
         self.visible_sprites.update()
+
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):

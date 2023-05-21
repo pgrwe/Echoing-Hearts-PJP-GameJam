@@ -1,10 +1,20 @@
-import pygame, math
+import pygame, math, random
 from src.Settings import *
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obj_sprites, create_spell):
         super().__init__(groups)
-        self.image = pygame.image.load("assets/Vegaslarge.png")
+        # importing animation
+        self.idle_list = []
+        self.idle_list.append(pygame.image.load("assets/echomage/idle1_right.png"))
+        self.idle_list.append(pygame.image.load("assets/echomage/idle2_right.png"))
+        self.idle_list.append(pygame.image.load("assets/echomage/idle3_right.png"))
+        # animations
+        self.current_frame = 0
+        self.is_animating = False
+
+        self.image = self.idle_list[self.current_frame]
+
         self.rect = self.image.get_rect(topleft = pos)
         self.dir = pygame.math.Vector2()
         self.speed = 8
@@ -12,14 +22,14 @@ class Player(pygame.sprite.Sprite):
 
         self.obj_sprites = obj_sprites
 
-        # spell cooldown
-        self.cooldown = 300
+
         
         # player resources
-        self.casting = False
         self.playerstates = "alive"
         self.create_spell = create_spell
         self.healthpoints = 1
+        self.player_time = 0
+
 
     def input(self):
         # gets input keys to determine direction
@@ -43,6 +53,7 @@ class Player(pygame.sprite.Sprite):
         self.spell_timer = pygame.time.get_ticks()
         mouse = pygame.mouse.get_pressed()
         if mouse[0]:
+            self.animate()
             self.create_spell(self.mouse_cursor())
 
             
@@ -81,14 +92,29 @@ class Player(pygame.sprite.Sprite):
                     if self.dir.y < 0: # moving up
                         self.hitbox.top = sprite.hitbox.bottom
 
-    def player_state(self):
-        print(self.healthpoints)
-        print(self.playerstates)
+    def animate(self):
+        self.is_animating = True
+
+    def state_tracker(self):
+        if self.playerstates == "recovering":
+            if pygame.time.get_ticks() - self.player_time > 1000:
+                self.playerstates = "alive"
 
     def update(self):
+        print(self.healthpoints)
+        print(self.playerstates)
+        if self.is_animating == True:
+            self.current_frame += 1
+
+            if self.current_frame >= len(self.idle_list):
+                self.current_frame = 0
+            
+            self.image = self.idle_list[self.current_frame]
+
+        self.state_tracker()
         self.input()
-        self.player_state()
         self.move(self.speed)
+
 
 
 class Spell(pygame.sprite.Sprite):
@@ -130,9 +156,27 @@ class Spell(pygame.sprite.Sprite):
             self.kill()
 
 class Echoes(pygame.sprite.Sprite):
-    def __init__(self,player,groups,mousepos):
+    def __init__(self, player, groups, obj_sprites):
         super().__init__(groups)
-        # load in spell image later self.image = pygame.image.load().convert_alpha()
-        self.image = pygame.Surface((10,10))
+        self.image = pygame.Surface((20,20))
         self.image.fill((150,20,87))
         self.rect = self.image.get_rect(center = player.rect.center)
+        self.rect.x += random.randint(-10,10)
+        self.rect.y += random.randint(-10,10)
+
+        self.echo_timer = pygame.time.get_ticks()
+        self.hitbox = self.rect.inflate(0,-10) # shrink 5 px from top and bottom
+        self.player = player
+
+
+    def consume_echo(self):
+        # collsion stuff related to the ground or other objects (static)
+        if pygame.time.get_ticks() >= self.echo_timer + 600:
+            if self.player.hitbox.colliderect(self.hitbox):
+                self.player.healthpoints += 1
+                self.kill()
+
+    def update(self):
+        self.consume_echo()
+
+

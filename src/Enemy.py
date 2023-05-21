@@ -1,5 +1,5 @@
 import pygame, math
-from src.Player import Player
+from src.Player import Player, Echoes
 # attack_radius = collision
 # notice_radius = infinite
 class Enemy(pygame.sprite.Sprite):
@@ -72,6 +72,7 @@ class Enemy(pygame.sprite.Sprite):
                 print("ouch")
                 self.player.healthpoints -= 1
                 self.player.playerstates = "hit"
+                self.player.player_time = pygame.time.get_ticks()
                 if self.dir.x > 0: # moving right
                     self.hitbox.right = self.hitbox.left
                 if self.dir.x < 0: # moving left
@@ -82,6 +83,7 @@ class Enemy(pygame.sprite.Sprite):
                 print("ouch") 
                 self.player.healthpoints -= 1
                 self.player.playerstates = "hit"
+                self.player.player_time = pygame.time.get_ticks()
                 if self.dir.y > 0: # moving down
                     self.hitbox.bottom = self.hitbox.top
                 if self.dir.y < 0: # moving up
@@ -89,5 +91,6 @@ class Enemy(pygame.sprite.Sprite):
 
 
     def update(self):
-        self.chase()
-        self.move(self.speed)
+        if self.player.playerstates == "alive":
+            self.chase()
+            self.move(self.speed)
