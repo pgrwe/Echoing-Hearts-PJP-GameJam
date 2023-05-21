@@ -15,11 +15,19 @@ class GameModel:
         # level setup
         self.level = Level()
 
-    def menu_loop(self):
-        pass 
+
+    def main_loop(self):
+        while True:
+            if self.level.state == "game":
+                self.game_loop()
+            elif self.level.state == "reset":
+                print("Re?")
+                self.reset_loop()
+            elif self.level.state == "menu":
+                self.menu_loop()
 
     def game_loop(self):
-        while True:
+        while self.level.state == "game":
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -31,14 +39,23 @@ class GameModel:
             pygame.display.update()
             self.clock.tick(FPS)
 
-    def run(self):
-        while True:
+    def reset_loop(self):
+        while self.level.state == "reset":
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if self.level.state == "reset":
-                    new = self.game_loop()
-                if self.level.state == "game":
-                    current_loop = self.game_loop()
+            self.level.reset()
 
+    def menu_loop(self):
+        pass
+    # def run(self):
+    #     while True:
+    #         for event in pygame.event.get():
+    #             if event.type == pygame.QUIT:
+    #                 pygame.quit()
+    #                 sys.exit()
+    #             if self.level.state == "reset":
+    #                 new = self.game_loop()
+    #             if self.level.state == "game":
+    #                 current_loop = self.game_loop()

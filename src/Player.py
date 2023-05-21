@@ -50,7 +50,7 @@ class Player(pygame.sprite.Sprite):
         self.playerstates = "alive"
         self.spell_cast = False
         self.healthpoints = 1
-        self.echo_hearts = 0 
+        self.echo_hearts = meta_echo_hearts 
         self.player_time = 0
         self.facing = "right"
 
