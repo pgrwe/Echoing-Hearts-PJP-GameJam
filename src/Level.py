@@ -72,7 +72,7 @@ class Level:
             self.player.spell_cast = False
 
     def enemy_spawner(self):
-        print(self.enemy_spawn_cooldown)
+        # print(self.enemy_spawn_cooldown)
         if self.enemy_spawn_cooldown <= 0:
             print("A New Enemy Approaches")
             rand_x = random.randint(15, 1250)
