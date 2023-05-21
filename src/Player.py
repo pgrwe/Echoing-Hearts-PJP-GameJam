@@ -98,7 +98,7 @@ class Player(pygame.sprite.Sprite):
             self.spell_cast = True
             self.cooldown = 25
 
-        print(self.cooldown)
+        # print(self.cooldown)
         self.cooldown-=1
 
             # self.mouse_cursor()
