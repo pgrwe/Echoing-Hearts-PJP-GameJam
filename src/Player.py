@@ -255,10 +255,13 @@ class Echoes(pygame.sprite.Sprite):
         self.enemy_group = enemy_group
 
     def input(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]:
-            if self.player.healthpoints >= 2:
-                self.consume_echo()
+        # keys = pygame.key.get_pressed()
+        # if keys[pygame.K_SPACE]:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_SPACE:
+                    if self.player.healthpoints >= 2:
+                        self.consume_echo()
 
     def animation_tracker(self):
         if self.facing == "right":

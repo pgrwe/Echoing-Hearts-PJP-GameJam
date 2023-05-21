@@ -80,6 +80,7 @@ class Level:
             self.enemy_spawn_cooldown = 50
         self.enemy_spawn_cooldown -= 1
 
+
     def game_reset(self):
         if self.player.healthpoints <= 0:
             self.create_map()
