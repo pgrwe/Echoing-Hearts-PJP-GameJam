@@ -1,5 +1,5 @@
 import pygame, math
-# from Settings import *
+from src.Settings import *
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obj_sprites, create_spell):
@@ -40,9 +40,12 @@ class Player(pygame.sprite.Sprite):
             self.dir.x = 0
 
         # gets mouse input to determine spellcasts
+        self.spell_timer = pygame.time.get_ticks()
         mouse = pygame.mouse.get_pressed()
         if mouse[0]:
             self.create_spell(self.mouse_cursor())
+
+            
             # self.mouse_cursor()
 
     def mouse_cursor(self):
@@ -96,9 +99,23 @@ class Spell(pygame.sprite.Sprite):
         self.image.fill("red")
         self.rect = self.image.get_rect(center = player.rect.center)
         self.speed = 15
+        self.spell_kill_timer = pygame.time.get_ticks()
 
-        self.x_mouse, self.y_mouse = mousepos
-        self.angle = math.atan2(self.y_mouse - self.rect.y, self.x_mouse - self.rect.x)
+        # setup current position vector
+        self.rect_vec = pygame.math.Vector2(self.rect.x,self.rect.y)
+
+        # setup up mouse position vector
+        self.mouse_vec = pygame.math.Vector2(mousepos)
+
+        # dot product between mouse and pos vectors
+        self.dot_product = self.mouse_vec.dot(self.rect_vec)
+
+        # magnitutudes of each vector
+        self.mouse_vec_mag = self.mouse_vec.magnitude()
+        self.rect_vec_mag = self.mouse_vec.magnitude()
+
+        
+        self.angle = (self.dot_product/(self.mouse_vec_mag * self.rect_vec_mag))
         self.x_vel = math.cos(self.angle) * self.speed
         self.y_vel = math.sin(self.angle) * self.speed
 
@@ -109,6 +126,13 @@ class Spell(pygame.sprite.Sprite):
     def update(self):
         # self.spell_cast()
         self.spellsling()
+        if pygame.time.get_ticks() >= self.spell_kill_timer + 200:
+            self.kill()
 
-# class Echoes(pygame.sprite.Sprite):
-#     def __init__(self,player,groups):
+class Echoes(pygame.sprite.Sprite):
+    def __init__(self,player,groups,mousepos):
+        super().__init__(groups)
+        # load in spell image later self.image = pygame.image.load().convert_alpha()
+        self.image = pygame.Surface((10,10))
+        self.image.fill((150,20,87))
+        self.rect = self.image.get_rect(center = player.rect.center)

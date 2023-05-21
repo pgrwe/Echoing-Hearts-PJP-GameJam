@@ -16,9 +16,10 @@ class Level:
         # sprite group setup
         self.visible_sprites = YSortCameraGroup()
         self.background_sprites = CameraGroup()
-        # self.spell_sprite = CameraSpell()
+        self.spell_sprites = pygame.sprite.Group()
         self.collision_sprites = pygame.sprite.Group()
         self.create_map()
+
 
     def create_map(self):
         for row_index, row in enumerate(WORLD_MAP):
