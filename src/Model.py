@@ -15,7 +15,6 @@ class GameModel:
         # level setup
         self.level = Level()
 
-    def main_menu(self):
 
         
 
