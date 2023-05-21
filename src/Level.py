@@ -18,6 +18,7 @@ class Level:
         self.background_sprites = CameraGroup()
         self.spell_sprites = pygame.sprite.Group()
         self.collision_sprites = pygame.sprite.Group()
+        self.enemy_sprites = pygame.sprite.Group()
         self.create_map()
 
         self.ticks = pygame.time.get_ticks()
@@ -47,6 +48,7 @@ class Level:
                     # spawns reaper
                     Tile(self.floor,(x,y),self.background_sprites)
                     self.enemy = Enemy("reaper",(x,y), [self.visible_sprites], self.collision_sprites, self.player)
+                    self.enemy_sprites.add(self.enemy)
 
     def cursor_display(self):
         pygame.draw.circle(self.display_surface, "blue", self.player.mouse_cursor(), 10)
@@ -57,16 +59,17 @@ class Level:
             self.player.playerstates = "recovering"
 
     def create_spell(self):
-        if self.player.playerstates == "casting":
-            Spell(self.player.rect,[self.visible_sprites], self.player.mouse_cursor(), self.enemy)
-            self.player.playerstates = "cooldown"
+        if self.player.spell_cast == True:
+            self.spell = Spell(self.player.rect,[self.visible_sprites], self.player.mouse_cursor(), self.enemy_sprites)
+            self.player.spell_cast = False
 
     def enemy_spawner(self):
         if pygame.time.get_ticks()%1000 == 0:
-            print("ticks")
+            print("A New Enemy Approaches")
             rand_x = random.randint(15, 1250)
             rand_y = random.randint(15, 600)
             self.enemy = Enemy("reaper",(rand_x, rand_y), [self.visible_sprites], self.collision_sprites, self.player)
+            self.enemy_sprites.add(self.enemy)
 
     def render(self):
         '''
@@ -114,6 +117,3 @@ class CameraGroup(pygame.sprite.Group):
         for sprite in self.sprites():
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_pos)
-    # def enemy_update(self, player)
-    #     enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "enemy"]
-    #     for enemy in enemy_sprites:
