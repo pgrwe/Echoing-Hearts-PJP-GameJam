@@ -103,14 +103,14 @@ class Player(pygame.sprite.Sprite):
                 self.playerstates = "alive"
 
     def update(self):
-        print(self.healthpoints)
-        print(self.playerstates)
+        # print(self.healthpoints)
+        # print(self.playerstates)
         if self.is_animating == True:
             self.current_frame += 1
 
             if self.current_frame >= len(self.idle_list):
                 self.current_frame = 0
-            
+
             self.image = self.idle_list[self.current_frame]
 
         self.state_tracker()
@@ -121,7 +121,7 @@ class Player(pygame.sprite.Sprite):
 
 class Spell(pygame.sprite.Sprite):
     # def __init__(self,player,groups,mousepos):
-    def __init__(self, player_rect, groups, mousepos):
+    def __init__(self, player_rect, groups, mousepos, enemy):
         super().__init__(groups)
         # load in spell image later self.image = pygame.image.load().convert_alpha()
         self.display_surface = pygame.display.get_surface()
@@ -130,6 +130,7 @@ class Spell(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = player_rect.center)
         self.speed = 15
         self.spell_kill_timer = pygame.time.get_ticks()
+        self.enemy = enemy
 
         self.x_mouse, self.y_mouse = mousepos
         # how ever far the mouse is from the actual center is how far the mouse is from the player
@@ -145,10 +146,20 @@ class Spell(pygame.sprite.Sprite):
     def spellsling(self):
         self.rect.x += self.x_vel
         self.rect.y += self.y_vel
+        self.hit()
+
+    def hit(self):
+        if self.rect.colliderect(self.enemy.hitbox):
+            print("ouch")
+            self.enemy.healthpoints -= 1
+            print(self.enemy.healthpoints)
+            self.enemy.state = "hit"
 
 
     def update(self):
         # self.spell_cast()
+        if self.enemy.healthpoints == 0:
+            self.enemy.kill()
         self.spellsling()
         if pygame.time.get_ticks() >= self.spell_kill_timer + 300:
             self.kill()
@@ -176,5 +187,3 @@ class Echoes(pygame.sprite.Sprite):
 
     def update(self):
         self.consume_echo()
-
-

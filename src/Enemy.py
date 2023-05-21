@@ -17,6 +17,8 @@ class Enemy(pygame.sprite.Sprite):
         self.target_pos = self.player.hitbox
         self.attack_radius = 120
         self.notice_radius = 400
+        self.healthpoints = 10
+        self.state = "alive"
 
     def chase(self):
         if self.target_pos.y > self.hitbox.y:
@@ -80,7 +82,7 @@ class Enemy(pygame.sprite.Sprite):
 
         if direction == "vert":
             if self.hitbox.colliderect(self.target_pos):
-                # print("ouch") 
+                # print("ouch")
                 self.player.healthpoints -= 1
                 self.player.playerstates = "hit"
                 self.player.player_time = pygame.time.get_ticks()
