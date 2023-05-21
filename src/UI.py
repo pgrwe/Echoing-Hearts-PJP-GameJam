@@ -18,5 +18,6 @@ class UI:
         #
     
     def ui_render(self, player):
-        self.display_Surface.blit(self.echo_heart, (100,100))
-        pass
+        if player.healthpoints > 0:
+            for i in range(player.healthpoints):
+                self.display_Surface.blit(self.heart, (65,50))

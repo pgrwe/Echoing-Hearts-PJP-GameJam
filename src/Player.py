@@ -267,10 +267,8 @@ class Echoes(pygame.sprite.Sprite):
     def consume_echo(self):
         # collsion stuff related to the ground or other objects (static)
         if pygame.time.get_ticks() >= self.echo_timer + 600:
-            if self.player.hitbox.colliderect(self.hitbox):
-                self.player.healthpoints += 1
-                self.kill()
-
+            print("echo ready")
+            pass
     def update(self):
         self.animation_tracker()
         self.consume_echo()

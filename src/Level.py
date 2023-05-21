@@ -52,11 +52,6 @@ class Level:
                     # spawns player
                     # self.player = Player((x,y),[self.visible_sprites],self.collision_sprites,self.create_spell)
                     self.player = Player((x,y),[self.visible_sprites],self.collision_sprites)
-                if col == 'e':
-                    # spawns reaper
-                    Tile(self.floor,(x,y),self.background_sprites)
-                    self.enemy = Enemy("reaper",(x,y), [self.visible_sprites], self.collision_sprites, self.player)
-                    self.enemy_sprites.add(self.enemy)
 
     def cursor_display(self):
         pygame.draw.circle(self.display_surface, "blue", self.player.mouse_cursor(), 10)
@@ -72,7 +67,6 @@ class Level:
             self.player.spell_cast = False
 
     def enemy_spawner(self):
-        print(self.enemy_spawn_cooldown)
         if self.enemy_spawn_cooldown <= 0:
             print("A New Enemy Approaches")
             rand_x = random.randint(15, 1250)
