@@ -12,8 +12,11 @@ class UI:
         self.heart = pygame.image.load(UI_HEART_IMAGE)
         self.echo_heart = pygame.image.load(UI_ECHO_HEART_IMAGE)
 
+        # need to render hearts and text
+
 
         #
     
     def ui_render(self, player):
+        self.display_Surface.blit(self.echo_heart, (100,100))
         pass
