@@ -24,21 +24,15 @@ class GameModel:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
-            self.screen.fill("black")
-            self.level.render()
-            # self.level.cursor_display()
-            pygame.display.update()
-            self.clock.tick(FPS)
+            if self.level.state == "game":
+                self.screen.fill("black")
+                self.level.render()
+                pygame.display.update()
+                self.clock.tick(FPS)
+            if self.level.state == "reset":
+                break
 
     def run(self):
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if self.level.state == "reset":
-                    new = self.game_loop()
-                if self.level.state == "game":
-                    current_loop = self.game_loop()
+        self.game_loop()
+
 
