@@ -1,7 +1,7 @@
 import pygame
 from src.Settings import *
 from src.Tile import Tile
-from src.Player import Player, Spell
+from src.Player import Player, Spell, Echoes
 from src.Enemy import Enemy
 
 class Level:
@@ -49,6 +49,14 @@ class Level:
 
     def cursor_display(self):
         pygame.draw.circle(self.display_surface, "blue", self.player.mouse_cursor(), 10)
+
+    # def create_spell(self, mousepos):
+    #     Spell(self.player,[self.visible_sprites], self.player.mouse_cursor())
+
+    def create_echo(self):
+        if self.player.playerstates == "hit":
+            Echoes(self.player,[self.visible_sprites],self.collision_sprites)
+            self.player.playerstates = "recovering"
 
     def render(self):
         '''
