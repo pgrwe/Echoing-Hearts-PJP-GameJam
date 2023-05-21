@@ -6,15 +6,36 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obj_sprites):
         super().__init__(groups)
         # importing animation
-        self.idle_list = []
-        self.idle_list.append(pygame.image.load("assets/echomage/idle1_right.png"))
-        self.idle_list.append(pygame.image.load("assets/echomage/idle2_right.png"))
-        self.idle_list.append(pygame.image.load("assets/echomage/idle3_right.png"))
+        self.idle_right = []
+        self.idle_right.append(pygame.image.load("assets/echomage/idle1_right.png"))
+        self.idle_right.append(pygame.image.load("assets/echomage/idle2_right.png"))
+        self.idle_right.append(pygame.image.load("assets/echomage/idle3_right.png"))
+
+        self.idle_left = []
+        self.idle_left.append(pygame.transform.flip(self.idle_right[0], True, False))
+        self.idle_left.append(pygame.transform.flip(self.idle_right[1], True, False))
+        self.idle_left.append(pygame.transform.flip(self.idle_right[2], True, False))
+        
+        self.run_right_list = []
+        self.run_right_list.append(pygame.image.load("assets/echomage/run1_right.png"))
+        self.run_right_list.append(pygame.image.load("assets/echomage/run2_right.png"))
+        self.run_right_list.append(pygame.image.load("assets/echomage/run3_right.png"))
+        self.run_right_list.append(pygame.image.load("assets/echomage/run4_right.png"))
+        self.run_right_list.append(pygame.image.load("assets/echomage/run5_right.png"))
+
+        self.run_left_list = []
+        self.run_left_list.append(pygame.transform.flip(self.run_right_list[0], True, False))
+        self.run_left_list.append(pygame.transform.flip(self.run_right_list[1], True, False))
+        self.run_left_list.append(pygame.transform.flip(self.run_right_list[2], True, False))
+        self.run_left_list.append(pygame.transform.flip(self.run_right_list[3], True, False))
+        self.run_left_list.append(pygame.transform.flip(self.run_right_list[4], True, False))
+
         # animations
         self.current_frame = 0
+        self.animation_state = "idle_right"
         self.is_animating = False
 
-        self.image = self.idle_list[self.current_frame]
+        self.image = self.idle_right[self.current_frame]
 
         self.rect = self.image.get_rect(topleft = pos)
         self.dir = pygame.math.Vector2()
@@ -32,6 +53,7 @@ class Player(pygame.sprite.Sprite):
         # self.create_spell = create_spell
         self.healthpoints = 1
         self.player_time = 0
+        self.facing = "right"
 
 
 
@@ -41,23 +63,40 @@ class Player(pygame.sprite.Sprite):
 
         if keys[pygame.K_UP] or keys[pygame.K_w]:
             self.dir.y = -1
+            if self.facing == "right" and self.dir.x == 0:
+                self.animation_state = "run_right"
+            elif self.facing == "left" and self.dir.x == 0:
+                self.animation_state = "run_left"
         elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
             self.dir.y = 1
+            if self.facing == "right" and self.dir.x == 0:
+                self.animation_state = "run_right"
+            elif self.facing == "left" and self.dir.x == 0:
+                self.animation_state = "run_left"
         else:
             self.dir.y = 0
 
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.dir.x = 1
+            self.facing = "right"
+            self.animation_state = "run_right"
         elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.dir.x = -1
+            self.facing = "left"
+            self.animation_state = "run_left"
         else:
             self.dir.x = 0
+        
+        if self.facing == "right" and self.dir == (0,0):
+            self.animation_state = "idle_right"
+        elif self.facing == "left" and self.dir == (0,0):
+            self.animation_state = "idle_left"
+
 
         # gets mouse input to determine spellcasts
         self.spell_timer = pygame.time.get_ticks()
         mouse = pygame.mouse.get_pressed()
         if mouse[0]:
-            self.animate()
             self.spell_cast = True
 
             # self.mouse_cursor()
@@ -94,26 +133,42 @@ class Player(pygame.sprite.Sprite):
                     if self.dir.y < 0: # moving up
                         self.hitbox.top = sprite.hitbox.bottom
 
-    def animate(self):
-        self.is_animating = True
 
     def state_tracker(self):
         if self.playerstates == "recovering":
             if pygame.time.get_ticks() - self.player_time > 1000:
                 self.playerstates = "alive"
 
+    def animation_tracker(self):
+        if self.animation_state == "idle_right":
+            self.current_frame += 0.1
+            if self.current_frame >= len(self.idle_right):
+                self.current_frame = 0 
+            self.image = self.idle_right[int(self.current_frame)]
+
+        if self.animation_state == "idle_left":
+            self.current_frame += 0.1
+            if self.current_frame >= len(self.idle_left):
+                self.current_frame = 0 
+            self.image = self.idle_left[int(self.current_frame)]
+
+        if self.animation_state == "run_right":
+            self.current_frame += 0.2 
+            if self.current_frame >= len(self.run_right_list):
+                self.current_frame = 0 
+            self.image = self.run_right_list[int(self.current_frame)]
+
+        if self.animation_state == "run_left":
+            self.current_frame += 0.2 
+            if self.current_frame >= len(self.run_left_list):
+                self.current_frame = 0 
+            self.image = self.run_left_list[int(self.current_frame)]
+
     def update(self):
         print(self.healthpoints)
         print(self.playerstates)
-        if self.is_animating == True:
-            self.current_frame += 1
-
-            if self.current_frame >= len(self.idle_list):
-                self.current_frame = 0
-            
-            self.image = self.idle_list[self.current_frame]
-
         self.state_tracker()
+        self.animation_tracker()
         self.input()
         self.move(self.speed)
 

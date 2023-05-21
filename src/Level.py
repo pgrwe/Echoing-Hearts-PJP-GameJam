@@ -50,22 +50,22 @@ class Level:
     def cursor_display(self):
         pygame.draw.circle(self.display_surface, "blue", self.player.mouse_cursor(), 10)
 
-    # def create_spell(self, mousepos):
-    #     Spell(self.player,[self.visible_sprites], self.player.mouse_cursor())
-
     def create_echo(self):
         if self.player.playerstates == "hit":
             Echoes(self.player,[self.visible_sprites],self.collision_sprites)
             self.player.playerstates = "recovering"
 
-    def render(self):
-        '''
-        updates and renders to the screen
-        '''
+    def create_spell(self):
         if self.player.spell_cast == True:
             Spell(self.player.rect,[self.visible_sprites], self.player.mouse_cursor())
             self.player.spell_cast = False
 
+    def render(self):
+        '''
+        updates and renders to the screen
+        '''
+        self.create_spell()
+        self.create_echo()
         self.background_sprites.camera_draw(self.player)
         self.background_sprites.update()
         self.visible_sprites.camera_draw(self.player)
