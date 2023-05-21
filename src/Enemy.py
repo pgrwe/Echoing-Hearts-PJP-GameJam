@@ -93,6 +93,6 @@ class Enemy(pygame.sprite.Sprite):
 
 
     def update(self):
-        if self.player.playerstates == "alive":
+        if self.player.playerstates != "recovering":
             self.chase()
             self.move(self.speed)

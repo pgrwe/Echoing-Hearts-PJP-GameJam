@@ -57,9 +57,9 @@ class Level:
             self.player.playerstates = "recovering"
 
     def create_spell(self):
-        if self.player.spell_cast == True:
-            self.spell = Spell(self.player.rect,[self.visible_sprites], self.player.mouse_cursor(), self.enemy)
-            self.player.spell_cast = False
+        if self.player.playerstates == "casting":
+            Spell(self.player.rect,[self.visible_sprites], self.player.mouse_cursor(), self.enemy)
+            self.player.playerstates = "cooldown"
 
     def enemy_spawner(self):
         if pygame.time.get_ticks()%1000 == 0:

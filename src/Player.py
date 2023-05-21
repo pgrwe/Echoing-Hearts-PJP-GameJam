@@ -97,7 +97,7 @@ class Player(pygame.sprite.Sprite):
         self.spell_timer = pygame.time.get_ticks()
         mouse = pygame.mouse.get_pressed()
         if mouse[0]:
-            self.spell_cast = True
+            self.playerstates = "casting"
 
             # self.mouse_cursor()
     def mouse_cursor(self):
@@ -135,6 +135,10 @@ class Player(pygame.sprite.Sprite):
 
 
     def state_tracker(self):
+        if self.playerstates ==  "cooldown":
+            if pygame.time.get_ticks() - self.player_time > 100000:
+                self.playerstates == "alive"
+
         if self.playerstates == "recovering":
             if pygame.time.get_ticks() - self.player_time > 1000:
                 self.playerstates = "alive"
@@ -220,7 +224,6 @@ class Spell(pygame.sprite.Sprite):
 
 
     def update(self):
-        # self.spell_cast()
         if self.enemy.healthpoints == 0:
             self.enemy.kill()
         self.spellsling()
