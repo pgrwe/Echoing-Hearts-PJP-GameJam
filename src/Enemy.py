@@ -95,7 +95,7 @@ class Enemy(pygame.sprite.Sprite):
             self.chase()
             self.move(self.speed)
         if self.state == "hit":
-            pygame.transform.invert(self.image)
+            pygame.transform.invert(self.image, self.image)
             print("be inverted")
         # if self.state == "chase":
         #     print("Chasing")
