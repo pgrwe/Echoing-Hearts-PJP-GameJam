@@ -188,11 +188,12 @@ class Player(pygame.sprite.Sprite):
             self.image = self.dying_list_right[int(self.current_frame)]
         
         if self.animation_state == "dying" and self.facing == "left":
-            self.current_frame += 0.05
+            self.current_frame += 0.03
             if self.current_frame >= len(self.dying_list_left):
                 self.current_frame = 0
                 self.playerstates = "death"
             self.image = self.dying_list_left[int(self.current_frame)]
+
     def update(self):
         # print(self.healthpoints)
         # print(self.playerstates)
@@ -235,13 +236,8 @@ class Spell(pygame.sprite.Sprite):
     def hit(self):
         for enemy in self.enemy_group:
             if self.rect.colliderect(enemy.hitbox):
-                print("E_hp: ", enemy.healthpoints)
                 enemy.state = "hit"
                 enemy.healthpoints -= 1
-
-            # enemy.state = "chase"
-
-
 
     def update(self):
         # self.spell_cast()
