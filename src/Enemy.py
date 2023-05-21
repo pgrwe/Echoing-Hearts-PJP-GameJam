@@ -7,6 +7,7 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__(groups)
         self.sprite_type = "enemy"
         self.image = pygame.image.load("assets/Vegaslarge.png")
+
         self.rect = self.image.get_rect(topleft = pos)
         self.dir = pygame.math.Vector2()
         self.speed = 2
@@ -75,6 +76,8 @@ class Enemy(pygame.sprite.Sprite):
                     self.player.playerstates = "death"
                 else:
                     self.player.playerstates = "hit"
+                self.player.echo_hearts += 1
+                self.player.playerstates = "hit"
                 self.player.player_time = pygame.time.get_ticks()
                 if self.dir.x > 0: # moving right
                     self.hitbox.right = self.hitbox.left
@@ -89,6 +92,8 @@ class Enemy(pygame.sprite.Sprite):
                     self.player.playerstates = "death"
                 else:
                     self.player.playerstates = "hit"
+                self.player.echo_hearts += 1
+                self.player.playerstates = "hit"
                 self.player.player_time = pygame.time.get_ticks()
                 if self.dir.y > 0: # moving down
                     self.hitbox.bottom = self.hitbox.top

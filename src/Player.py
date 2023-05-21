@@ -49,9 +49,12 @@ class Player(pygame.sprite.Sprite):
         # player resources
         self.playerstates = "alive"
         self.spell_cast = False
-        # self.create_spell = create_spell
         self.healthpoints = 1
+<<<<<<< HEAD
         self.echo_hearts = 0
+=======
+        self.echo_hearts = 0
+>>>>>>> 7fc6c342ea1804b72e0ee59fdbb58f3df02613eb
         self.player_time = 0
         self.facing = "right"
 
@@ -139,7 +142,7 @@ class Player(pygame.sprite.Sprite):
 
     def state_tracker(self):
         if self.playerstates == "recovering":
-            if pygame.time.get_ticks() - self.player_time > 1000:
+            if pygame.time.get_ticks() - self.player_time > 1600:
                 self.playerstates = "alive"
 
     def animation_tracker(self):
@@ -189,7 +192,6 @@ class Spell(pygame.sprite.Sprite):
         self.speed = 15
         self.spell_kill_timer = pygame.time.get_ticks()
         self.enemy_group = enemy_group
-        self.enemy_timer = 500
 
         self.x_mouse, self.y_mouse = mousepos
         # how ever far the mouse is from the actual center is how far the mouse is from the player
@@ -213,7 +215,6 @@ class Spell(pygame.sprite.Sprite):
                 # print("E_hp: ", enemy.healthpoints)
                 enemy.state = "hit"
                 enemy.healthpoints -= 1
-                self.enemy_timer -= 1
 
             # enemy.state = "chase"
 
