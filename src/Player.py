@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.idle_left.append(pygame.transform.flip(self.idle_right[0], True, False))
         self.idle_left.append(pygame.transform.flip(self.idle_right[1], True, False))
         self.idle_left.append(pygame.transform.flip(self.idle_right[2], True, False))
-        
+
         self.run_right_list = []
         self.run_right_list.append(pygame.image.load("assets/echomage/run1_right.png"))
         self.run_right_list.append(pygame.image.load("assets/echomage/run2_right.png"))
@@ -86,7 +86,7 @@ class Player(pygame.sprite.Sprite):
             self.animation_state = "run_left"
         else:
             self.dir.x = 0
-        
+
         if self.facing == "right" and self.dir == (0,0):
             self.animation_state = "idle_right"
         elif self.facing == "left" and self.dir == (0,0):
@@ -143,30 +143,38 @@ class Player(pygame.sprite.Sprite):
         if self.animation_state == "idle_right":
             self.current_frame += 0.1
             if self.current_frame >= len(self.idle_right):
-                self.current_frame = 0 
+                self.current_frame = 0
             self.image = self.idle_right[int(self.current_frame)]
 
         if self.animation_state == "idle_left":
             self.current_frame += 0.1
             if self.current_frame >= len(self.idle_left):
-                self.current_frame = 0 
+                self.current_frame = 0
             self.image = self.idle_left[int(self.current_frame)]
 
         if self.animation_state == "run_right":
-            self.current_frame += 0.2 
+            self.current_frame += 0.2
             if self.current_frame >= len(self.run_right_list):
-                self.current_frame = 0 
+                self.current_frame = 0
             self.image = self.run_right_list[int(self.current_frame)]
 
         if self.animation_state == "run_left":
-            self.current_frame += 0.2 
+            self.current_frame += 0.2
             if self.current_frame >= len(self.run_left_list):
-                self.current_frame = 0 
+                self.current_frame = 0
             self.image = self.run_left_list[int(self.current_frame)]
 
     def update(self):
-        print(self.healthpoints)
-        print(self.playerstates)
+        # print(self.healthpoints)
+        # print(self.playerstates)
+        if self.is_animating == True:
+            self.current_frame += 1
+
+            if self.current_frame >= len(self.idle_list):
+                self.current_frame = 0
+
+            self.image = self.idle_list[self.current_frame]
+
         self.state_tracker()
         self.animation_tracker()
         self.input()
@@ -176,7 +184,7 @@ class Player(pygame.sprite.Sprite):
 
 class Spell(pygame.sprite.Sprite):
     # def __init__(self,player,groups,mousepos):
-    def __init__(self, player_rect, groups, mousepos):
+    def __init__(self, player_rect, groups, mousepos, enemy):
         super().__init__(groups)
         # load in spell image later self.image = pygame.image.load().convert_alpha()
         self.display_surface = pygame.display.get_surface()
@@ -185,6 +193,7 @@ class Spell(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = player_rect.center)
         self.speed = 15
         self.spell_kill_timer = pygame.time.get_ticks()
+        self.enemy = enemy
 
         self.x_mouse, self.y_mouse = mousepos
         # how ever far the mouse is from the actual center is how far the mouse is from the player
@@ -200,10 +209,20 @@ class Spell(pygame.sprite.Sprite):
     def spellsling(self):
         self.rect.x += self.x_vel
         self.rect.y += self.y_vel
+        self.hit()
+
+    def hit(self):
+        if self.rect.colliderect(self.enemy.hitbox):
+            print("ouch")
+            self.enemy.healthpoints -= 1
+            print(self.enemy.healthpoints)
+            self.enemy.state = "hit"
 
 
     def update(self):
         # self.spell_cast()
+        if self.enemy.healthpoints == 0:
+            self.enemy.kill()
         self.spellsling()
         if pygame.time.get_ticks() >= self.spell_kill_timer + 300:
             self.kill()
@@ -231,5 +250,3 @@ class Echoes(pygame.sprite.Sprite):
 
     def update(self):
         self.consume_echo()
-
-
