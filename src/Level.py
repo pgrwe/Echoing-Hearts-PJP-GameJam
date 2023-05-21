@@ -3,25 +3,33 @@ from src.Settings import *
 from src.Tile import Tile
 from src.Player import Player, Spell, Echoes
 from src.Enemy import Enemy
+from src.UI import UI
 
 class Level:
     def __init__(self):
         # loading tile assets
+
         self.front_wall = pygame.image.load("assets/terrain/wall_mid.png")
         self.right_wall = pygame.image.load("assets/terrain/wall_outer_front_right.png")
         self.left_wall = pygame.image.load("assets/terrain/wall_outer_front_left.png")
         self.floor = pygame.image.load("assets/terrain/floor.png")
         # get display surface
         self.display_surface = pygame.display.get_surface()
+
         # sprite group setup
         self.visible_sprites = YSortCameraGroup()
         self.background_sprites = CameraGroup()
         self.spell_sprites = pygame.sprite.Group()
         self.collision_sprites = pygame.sprite.Group()
         self.enemy_sprites = pygame.sprite.Group()
+
+        # ui setup
+        self.ui = UI()
+
         self.create_map()
 
-        self.ticks = pygame.time.get_ticks()
+        self.enemy_spawn_cooldown = 50
+
 
     def create_map(self):
         for row_index, row in enumerate(WORLD_MAP):
@@ -64,12 +72,15 @@ class Level:
             self.player.spell_cast = False
 
     def enemy_spawner(self):
-        if pygame.time.get_ticks()%1000 == 0:
+        print(self.enemy_spawn_cooldown)
+        if self.enemy_spawn_cooldown <= 0:
             print("A New Enemy Approaches")
             rand_x = random.randint(15, 1250)
             rand_y = random.randint(15, 600)
             self.enemy = Enemy("reaper",(rand_x, rand_y), [self.visible_sprites], self.collision_sprites, self.player)
             self.enemy_sprites.add(self.enemy)
+            self.enemy_spawn_cooldown = 50
+        self.enemy_spawn_cooldown -= 1
 
     def render(self):
         '''
@@ -82,6 +93,7 @@ class Level:
         self.background_sprites.update()
         self.visible_sprites.camera_draw(self.player)
         self.visible_sprites.update()
+        self.ui.ui_render(self.player)
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):

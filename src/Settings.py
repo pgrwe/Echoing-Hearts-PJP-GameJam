@@ -1,7 +1,15 @@
+# game setup
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 FPS = 60
 TILESIZE = 64
+
+# ui
+UI_FONT = "assets/UI/alagard.ttf"
+UI_FONT_SIZE = 18
+
+
+
 
 WORLD_MAP = [
 ['l','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','r'],
