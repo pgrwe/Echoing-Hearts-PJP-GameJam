@@ -8,6 +8,9 @@ TILESIZE = 64
 UI_FONT = "assets/UI/alagard.ttf"
 UI_FONT_SIZE = 18
 
+UI_HEART_IMAGE = "assets/UI/Heart.png"
+UI_ECHO_HEART_IMAGE = "assets/UI/Echo_Heart.png"
+
 
 
 
