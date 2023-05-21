@@ -51,6 +51,7 @@ class Player(pygame.sprite.Sprite):
         self.spell_cast = False
         # self.create_spell = create_spell
         self.healthpoints = 1
+        self.echo_hearts = 0
         self.player_time = 0
         self.facing = "right"
 
@@ -85,6 +86,7 @@ class Player(pygame.sprite.Sprite):
             self.animation_state = "run_left"
         else:
             self.dir.x = 0
+
 
         if self.facing == "right" and self.dir == (0,0):
             self.animation_state = "idle_right"
@@ -208,7 +210,7 @@ class Spell(pygame.sprite.Sprite):
     def hit(self):
         for enemy in self.enemy_group:
             if self.rect.colliderect(enemy.hitbox):
-                print("E_hp: ", enemy.healthpoints)
+                # print("E_hp: ", enemy.healthpoints)
                 enemy.state = "hit"
                 enemy.healthpoints -= 1
                 self.enemy_timer -= 1
@@ -220,7 +222,7 @@ class Spell(pygame.sprite.Sprite):
     def update(self):
         # self.spell_cast()
         for enemy in self.enemy_group:
-            if enemy.healthpoints == 0:
+            if enemy.healthpoints <= 0:
                 self.enemy_group.remove(enemy)
                 enemy.kill()
         self.spellsling()
@@ -228,7 +230,7 @@ class Spell(pygame.sprite.Sprite):
             self.kill()
 
 class Echoes(pygame.sprite.Sprite):
-    def __init__(self, player, groups, obj_sprites):
+    def __init__(self, player, groups, obj_sprites, enemy_group):
         super().__init__(groups)
 
         self.echo_idle_right = []
@@ -247,10 +249,20 @@ class Echoes(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = player.rect.center)
 
         self.echo_timer = pygame.time.get_ticks()
-        self.hitbox = self.rect.inflate(0,-10) # shrink 5 px from top and bottom
+        self.hitbox = self.rect.inflate(30,30) # shrink 5 px from top and bottom
         self.player = player
 
         self.facing = self.player.facing
+        self.state = "wait"
+
+        self.enemy_group = enemy_group
+
+    def input(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            print("CONSUME")
+            if self.player.healthpoints >= 2:
+                self.consume_echo()
 
     def animation_tracker(self):
         if self.facing == "right":
@@ -267,10 +279,21 @@ class Echoes(pygame.sprite.Sprite):
 
 
     def consume_echo(self):
-        # collsion stuff related to the ground or other objects (static)
-        if pygame.time.get_ticks() >= self.echo_timer + 600:
-            print("echo ready")
-            pass
+        self.player.echo_hearts -= 1
+        self.state = "attacking"
+        for enemy in self.enemy_group:
+            if self.hitbox.colliderect(enemy.hitbox):
+                # print("E_hp: ", enemy.healthpoints)
+                enemy.state = "hit"
+                enemy.healthpoints -= 100
+
+        print("Gone")
+
+
     def update(self):
+        self.input()
+        for enemy in self.enemy_group:
+            if enemy.healthpoints <= 0:
+                self.enemy_group.remove(enemy)
+                enemy.kill()
         self.animation_tracker()
-        self.consume_echo()

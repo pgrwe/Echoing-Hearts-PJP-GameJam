@@ -57,8 +57,12 @@ class Level:
         pygame.draw.circle(self.display_surface, "blue", self.player.mouse_cursor(), 10)
 
     def create_echo(self):
-        if self.player.playerstates == "hit":
-            Echoes(self.player,[self.visible_sprites],self.collision_sprites)
+        if self.player.playerstates == "death":
+            self.player.echo_hearts += 1
+            print("Echo: ", self.player.echo_hearts)
+            self.player.healthpoints += self.player.echo_hearts
+            print("HP: ", self.player.healthpoints)
+            Echoes(self.player,[self.visible_sprites],self.collision_sprites, self.enemy_sprites)
             self.player.playerstates = "recovering"
 
     def create_spell(self):

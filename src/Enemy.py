@@ -71,7 +71,10 @@ class Enemy(pygame.sprite.Sprite):
             if self.hitbox.colliderect(self.target_pos):
                 # print("ouch")
                 self.player.healthpoints -= 1
-                self.player.playerstates = "hit"
+                if self.player.healthpoints <= 0:
+                    self.player.playerstates = "death"
+                else:
+                    self.player.playerstates = "hit"
                 self.player.player_time = pygame.time.get_ticks()
                 if self.dir.x > 0: # moving right
                     self.hitbox.right = self.hitbox.left
@@ -82,7 +85,10 @@ class Enemy(pygame.sprite.Sprite):
             if self.hitbox.colliderect(self.target_pos):
                 # print("ouch")
                 self.player.healthpoints -= 1
-                self.player.playerstates = "hit"
+                if self.player.healthpoints <= 0:
+                    self.player.playerstates = "death"
+                else:
+                    self.player.playerstates = "hit"
                 self.player.player_time = pygame.time.get_ticks()
                 if self.dir.y > 0: # moving down
                     self.hitbox.bottom = self.hitbox.top
@@ -96,7 +102,7 @@ class Enemy(pygame.sprite.Sprite):
             self.move(self.speed)
         if self.state == "hit":
             pygame.transform.invert(self.image, self.image)
-            print("be inverted")
+            # print("be inverted")
         # if self.state == "chase":
         #     print("Chasing")
         #     self.image = pygame.image.load("assets/Vegaslarge.png")
