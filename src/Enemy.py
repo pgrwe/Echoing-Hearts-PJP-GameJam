@@ -10,7 +10,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft = pos)
         self.dir = pygame.math.Vector2()
         self.speed = 2
-        self.hitbox  = self.rect.inflate(-6,-10) # removes 3 px from left/right and 5 from top/bottom
+        self.hitbox  = self.rect.inflate(-2,-4) # removes 3 px from left/right and 5 from top/bottom
 
         self.obj_sprites = obj_sprites
         self.player = player
