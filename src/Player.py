@@ -187,6 +187,7 @@ class Spell(pygame.sprite.Sprite):
         self.speed = 15
         self.spell_kill_timer = pygame.time.get_ticks()
         self.enemy_group = enemy_group
+        self.enemy_timer = 500
 
         self.x_mouse, self.y_mouse = mousepos
         # how ever far the mouse is from the actual center is how far the mouse is from the player
@@ -207,10 +208,11 @@ class Spell(pygame.sprite.Sprite):
     def hit(self):
         for enemy in self.enemy_group:
             if self.rect.colliderect(enemy.hitbox):
-                self.hit_timer = pygame.time.get_ticks()
                 print("E_hp: ", enemy.healthpoints)
                 enemy.state = "hit"
                 enemy.healthpoints -= 1
+                self.enemy_timer -= 1
+
             # enemy.state = "chase"
 
 

@@ -95,4 +95,8 @@ class Enemy(pygame.sprite.Sprite):
             self.chase()
             self.move(self.speed)
         if self.state == "hit":
-            self.image.fill("red")
+            pygame.transform.invert(self.image, self.image)
+            print("be inverted")
+        # if self.state == "chase":
+        #     print("Chasing")
+        #     self.image = pygame.image.load("assets/Vegaslarge.png")
